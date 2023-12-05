@@ -1,4 +1,12 @@
-#include "symptoms.h"
+#ifndef PATIENT_QUEUE_H
+#define PATIENT_QUEUE_H
+
+#include "triage_level.h"
+
+struct patient_node {
+  void *data;
+  struct patient_node *next;
+};
 
 enum Gender { Male, Female };
 
@@ -11,3 +19,5 @@ struct Patient {
 };
 
 enum Triage_Level get_triage(struct Patient patient);
+
+#endif

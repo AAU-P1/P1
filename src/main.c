@@ -35,7 +35,7 @@ int main(void) {
   WINDOW *win = newwin(0, 0, 0, 0);
   refresh();
 
-  mvwprintw(win, 15, 50, "Hello Friend");
+  mvwprintw(win, 25, 10, "(I)nput patient from file");
 
   wrefresh(win);
   getch();

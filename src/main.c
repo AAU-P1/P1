@@ -192,6 +192,8 @@ void input_vitals(struct Patient *patient) {
       oxygen_saturation_found = true;
     }
   }
+    patient->vitals->pulse = input_int("Enter patient pulse");
+
 }
 
 void clearInputBuffer() {

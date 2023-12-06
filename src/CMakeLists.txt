@@ -9,8 +9,14 @@ target_include_directories(vitals PUBLIC .)
 
 add_library(triage_level triage_level.c)
 
-find_package(Curses REQUIRED)
-include_directories(${CURSES_INCLUDE_DIR})
-
 add_executable(main main.c)
-target_link_libraries(main patient_queue symptoms vitals triage_level ${CURSES_LIBRARIES})
+
+if(WIN32 OR MSVC)
+        add_subdirectory(pdcurses)
+        target_link_libraries(main PRIVATE PDcurses)
+else()
+        find_package(Curses REQUIRED)
+        include_directories(${CURSES_INCLUDE_DIR})
+        target_link_libraries(main patient_queue symptoms vitals triage_level ${CURSES_LIBRARIES})
+endif()
+

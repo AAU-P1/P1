@@ -36,6 +36,7 @@ int main(void) {
   refresh();
 
   mvwprintw(win, 25, 10, "(I)nput patient from file");
+  wrefresh(win);
 
   wrefresh(win);
   getch();

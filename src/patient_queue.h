@@ -32,7 +32,7 @@ enum Triage_Level get_triage(struct Patient patient);
 void add_patient_to_queue(struct patient_queue *patient_queue,
                           struct Patient patient);
 
-void *insert_tail(struct patient_node *cl, void *el);
+struct patient_node *insert_tail(struct patient_node *cl, void *el);
 void print_patient(struct Patient *patient);
 void print_circular_patient_list(struct patient_node *cl);
 void print_queue(struct patient_queue *patient_queue);

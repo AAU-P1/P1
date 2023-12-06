@@ -27,19 +27,4 @@ int main(void) {
   patient.symptoms_head = NULL;
 
   printf("triage_level anton: %d\n", get_triage(patient));
-
-  initscr();
-  cbreak();
-  noecho();
-
-  WINDOW *win = newwin(0, 0, 0, 0);
-  refresh();
-
-  mvwprintw(win, 25, 10, "(I)nput patient from file");
-  wrefresh(win);
-
-  wrefresh(win);
-  getch();
-
-  endwin();
 }

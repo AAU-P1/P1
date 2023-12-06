@@ -11,7 +11,7 @@ void input_patient();
 void input_vitals(struct Patient *patient);
 
 int main(void) {
-
+//pls virk
   // Make Anton and triage him
   struct Vitals anton_vitals;
   anton_vitals.airway = Free;

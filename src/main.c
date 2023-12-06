@@ -1,7 +1,6 @@
 #include "patient_queue.h"
 #include "symptoms.h"
 #include "vitals.h"
-#include <ncurses.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -181,6 +180,8 @@ void input_vitals(struct Patient *patient) {
     }
   }
 
+  patient->vitals->glasgow_coma_scale = input_int("Enter GCS value:");
+
   bool oxygen_saturation_found = false;
   while (!oxygen_saturation_found) {
     printf("Input patient Oxygen Saturation\n");
@@ -199,3 +200,4 @@ void clearInputBuffer() {
   while ((c = getchar()) != '\n' && c != EOF) {
   }
 }
+

@@ -8,33 +8,12 @@
 #include <string.h>
 
 void clearInputBuffer();
-void input_patient(struct patient_queue *patient_queue);
-void input_vitals(struct Patient *patient);
-
+struct Patient input_patient();
+void input_vitals(struct Vitals *vitals);
 int main(void) {
 
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL};
 
-  // Make Anton and triage him
-  struct Vitals anton_vitals;
-  anton_vitals.airway = Free;
-  anton_vitals.oxygen_saturation = 100;
-  anton_vitals.with_oxygen = false;
-  anton_vitals.with_kol = false;
-  anton_vitals.respiration_frequency = 10;
-  anton_vitals.pulse = 60;
-  anton_vitals.systolic_blood_pressure = 100;
-  anton_vitals.glasgow_coma_scale = 10;
-  anton_vitals.temperature_celcius = 37;
-
-  struct Patient patient;
-  strcpy(patient.name, "Anton");
-  patient.age = 21;
-  patient.gender = Female;
-  patient.vitals = &anton_vitals;
-  patient.symptoms_head = NULL;
-
-  printf("triage_level anton: %d\n", get_triage(patient));
   char choice;
   while (choice != 'q') {
 
@@ -46,7 +25,8 @@ int main(void) {
     switch (choice) {
     case 'T':
     case 't':
-      input_patient(&patient_queue);
+      add_patient_to_queue(&patient_queue, input_patient());
+      print_queue(&patient_queue);
       break;
     case 'I':
     case 'i':
@@ -118,7 +98,7 @@ void input_string(char *message, char *dest) {
   }
 }
 
-void input_patient(struct patient_queue *patient_queue) {
+struct Patient input_patient() {
 
   struct Patient patient;
 
@@ -148,7 +128,8 @@ void input_patient(struct patient_queue *patient_queue) {
   switch (choice) {
   case 'Y':
   case 'y':
-    input_vitals(&patient);
+    patient.vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
+    input_vitals(patient.vitals);
     break;
   case 'N':
   case 'n':
@@ -156,13 +137,10 @@ void input_patient(struct patient_queue *patient_queue) {
     break;
   }
 
-  add_patient_to_queue(patient_queue, patient);
-  print_queue(patient_queue);
+  return patient;
 }
 
-void input_vitals(struct Patient *patient) {
-
-  patient->vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
+void input_vitals(struct Vitals *vitals) {
 
   char choice;
 
@@ -173,15 +151,15 @@ void input_vitals(struct Patient *patient) {
   switch (choice) {
   case 'B':
   case 'b':
-    patient->vitals->airway = Blocked;
+    vitals->airway = Blocked;
     break;
   case 'F':
   case 'f':
-    patient->vitals->airway = Free;
+    vitals->airway = Free;
     break;
   case 'I':
   case 'i':
-    patient->vitals->airway = Inspiratory_stridor;
+    vitals->airway = Inspiratory_stridor;
     break;
   }
 
@@ -190,42 +168,38 @@ void input_vitals(struct Patient *patient) {
   switch (choice) {
   case 'Y':
   case 'y':
-    patient->vitals->with_kol = true;
+    vitals->with_kol = true;
     break;
   case 'N':
   case 'n':
-    patient->vitals->with_kol = false;
+    vitals->with_kol = false;
     break;
   }
 
-  input_int("Input Oxygen Saturation", &patient->vitals->oxygen_saturation);
+  input_int("Input Oxygen Saturation", &vitals->oxygen_saturation);
 
   // Get patient_vitals Airway
   input_char(&choice, "Is the patient with oxygen? (Y)es  (N)o", "YyNn");
   switch (choice) {
   case 'Y':
   case 'y':
-    patient->vitals->with_oxygen = true;
+    vitals->with_oxygen = true;
     break;
   case 'N':
   case 'n':
-    patient->vitals->with_oxygen = false;
+    vitals->with_oxygen = false;
     break;
   }
 
-  input_int("Input Respiration Frequency",
-            &patient->vitals->respiration_frequency);
+  input_int("Input Respiration Frequency", &vitals->respiration_frequency);
 
-  input_int("Input Pulse", &patient->vitals->pulse);
+  input_int("Input Pulse", &vitals->pulse);
 
-  input_int("Input Systolic Blood Pressure",
-            &patient->vitals->systolic_blood_pressure);
+  input_int("Input Systolic Blood Pressure", &vitals->systolic_blood_pressure);
 
-  input_int("Input Glasgow Coma Scale Number",
-            &patient->vitals->glasgow_coma_scale);
+  input_int("Input Glasgow Coma Scale Number", &vitals->glasgow_coma_scale);
 
-  input_double("Input Temperature Celcius",
-               &patient->vitals->temperature_celcius);
+  input_double("Input Temperature Celcius", &vitals->temperature_celcius);
 }
 void clearInputBuffer() {
   int c;

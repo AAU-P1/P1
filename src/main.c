@@ -3,6 +3,7 @@
 #include "vitals.h"
 #include <ncurses.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void clearInputBuffer();
@@ -42,7 +43,7 @@ int main(void) {
   switch (choice) {
   case 'T':
   case 't':
-    triage_new_patient();
+    input_patient();
     break;
   case 'I':
   case 'i':
@@ -58,18 +59,55 @@ int main(void) {
   }
 }
 
-int input_int(char *message) {
-  bool found = false;
-  while (found == false) {
+void input_int(char *message, int *dest) {
+  while (true) {
     printf("%s\n", message);
-    int number;
-    int res = scanf("%d", &number);
+    int res = scanf("%d", dest);
     clearInputBuffer();
     if (res != 1) {
       printf("Invalid input. Try again!\n");
     } else {
-      found = true;
-      return number;
+      return;
+    }
+  }
+}
+
+void input_double(char *message, double *dest) {
+  while (true) {
+    printf("%s\n", message);
+    int res = scanf("%lf", dest);
+    clearInputBuffer();
+    if (res != 1) {
+      printf("Invalid input. Try again!\n");
+    } else {
+      return;
+    }
+  }
+}
+
+void input_char(char *choice, char *message, char *valid_chars,
+                int len_valid_chars) {
+  while (true) {
+    printf("%s\n", message);
+    char c = getchar();
+    clearInputBuffer();
+    for (int i = 0; i < len_valid_chars; ++i) {
+      if (c == valid_chars[i]) {
+        choice = &c;
+        return;
+      }
+    }
+  }
+}
+
+void input_string(char *message, char *dest) {
+  while (true) {
+    printf("%s\n", message);
+    int res = scanf("%s", dest);
+    if (res != 1) {
+      printf("Invalid input. Try again!\n");
+    } else {
+      return;
     }
   }
 }
@@ -78,43 +116,32 @@ void input_patient() {
 
   struct Patient patient;
 
-  bool name_found = false;
-  while (!name_found) {
-    printf("Input patient name\n");
-    int res = scanf("%s", &patient.name);
-    clearInputBuffer();
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      name_found = true;
-    }
+  // Get patient Name
+  input_string("input patient name", patient.name);
+
+  // Get patient Age
+  input_int("Input patient age", &patient.age);
+
+  // Get patient Gender
+  char choice;
+  int len_valid_chars = 2;
+  char *valid_chars = (char *)malloc(len_valid_chars * sizeof(char));
+  input_char(&choice, "Input patient gender, (M)ale or (F)emale", valid_chars,
+             len_valid_chars);
+  switch (choice) {
+  case 'M':
+  case 'm':
+    patient.gender = Male;
+    break;
+  case 'F':
+  case 'f':
+    patient.gender = Female;
+    break;
+  default:
+    printf("We only recognize two genders ;). Try again sissy!\n");
   }
 
-  patient.age = input_int("Input patient age");
-
-  bool gender_found = false;
-  while (!gender_found) {
-    char choice;
-    printf("Input patient gender, (M)ale or (F)emale\n");
-    choice = getchar();
-    clearInputBuffer();
-
-    switch (choice) {
-    case 'M':
-    case 'm':
-      patient.gender = Male;
-      gender_found = true;
-      break;
-    case 'F':
-    case 'f':
-      patient.gender = Female;
-      gender_found = true;
-      break;
-    default:
-      printf("We only recognize two genders ;). Try again sissy!\n");
-    }
-  }
-
+  // Get patient Vitals
   input_vitals(&patient);
 }
 
@@ -147,17 +174,8 @@ void input_vitals(struct Patient *patient) {
     }
   }
 
-  bool oxygen_saturation_found = false;
-  while (!oxygen_saturation_found) {
-    printf("Input patient Oxygen Saturation\n");
-    int res = scanf("%d", &patient->vitals->oxygen_saturation);
-    clearInputBuffer();
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      oxygen_saturation_found = true;
-    }
-  }
+  patient->vitals->oxygen_saturation =
+      input_int("Input patient Oxygen Saturation");
 
   bool with_oxygen_found = false;
   while (!with_oxygen_found) {
@@ -181,25 +199,8 @@ void input_vitals(struct Patient *patient) {
     }
   }
 
-  bool oxygen_saturation_found = false;
-  while (!oxygen_saturation_found) {
-    printf("Input patient Oxygen Saturation\n");
-    int res = scanf("%d", &patient->vitals->oxygen_saturation);
-    clearInputBuffer();
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      oxygen_saturation_found = true;
+  void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
     }
   }
-
-  patient->vitals->systolic_blood_pressure = input_int("Enter the systolic blood preasure");
-
-
-}
-
-void clearInputBuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF) {
-  }
-}

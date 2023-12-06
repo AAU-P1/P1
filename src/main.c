@@ -13,7 +13,7 @@ void input_vitals(struct Patient *patient);
 
 int main(void) {
 
-  struct patient_queue patient_queue;
+  struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL};
 
   // Make Anton and triage him
   struct Vitals anton_vitals;
@@ -156,8 +156,6 @@ void input_patient(struct patient_queue *patient_queue) {
     break;
   }
 
-  patient.symptoms_head = NULL;
-
   add_patient_to_queue(patient_queue, patient);
   print_queue(patient_queue);
 }
@@ -214,6 +212,9 @@ void input_vitals(struct Patient *patient) {
     patient->vitals->with_oxygen = false;
     break;
   }
+
+  input_int("Input Respiration Frequency",
+            &patient->vitals->respiration_frequency);
 
   input_int("Input Pulse", &patient->vitals->pulse);
 

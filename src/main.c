@@ -199,6 +199,9 @@ void input_vitals(struct Patient *patient) {
     }
   }
 
+  patient->vitals->glasgow_coma_scale =
+          input_int("Input GCS value");
+
   void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF) {

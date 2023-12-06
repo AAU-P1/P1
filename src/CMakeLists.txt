@@ -13,7 +13,7 @@ add_executable(main main.c)
 
 if(WIN32 OR MSVC)
         add_subdirectory(pdcurses)
-        target_link_libraries(main PRIVATE PDcurses)
+        target_link_libraries(main patient_queue symptoms vitals triage_level PRIVATE PDcurses)
 else()
         find_package(Curses REQUIRED)
         include_directories(${CURSES_INCLUDE_DIR})

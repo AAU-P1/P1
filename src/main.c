@@ -35,30 +35,31 @@ int main(void) {
   patient.symptoms_head = NULL;
 
   printf("triage_level anton: %d\n", get_triage(patient));
-
   char choice;
+  while (choice != 'q') {
 
-  printf("(T)riage new patient      (I)nput patient from file       (R)emove "
-         "Patient         (D)isplay Queue\n");
-  choice = getchar();
-  clearInputBuffer();
+    printf("(T)riage new patient      (I)nput patient from file       (R)emove "
+           "Patient         (D)isplay Queue\n");
+    choice = getchar();
+    clearInputBuffer();
 
-  switch (choice) {
-  case 'T':
-  case 't':
-    input_patient(&patient_queue);
-    break;
-  case 'I':
-  case 'i':
-    break;
-  case 'R':
-  case 'r':
-    break;
-  case 'D':
-  case 'd':
-    break;
-  default:
-    printf("Invalid input try again");
+    switch (choice) {
+    case 'T':
+    case 't':
+      input_patient(&patient_queue);
+      break;
+    case 'I':
+    case 'i':
+      break;
+    case 'R':
+    case 'r':
+      break;
+    case 'D':
+    case 'd':
+      break;
+    default:
+      printf("Invalid input try again");
+    }
   }
 }
 
@@ -151,8 +152,11 @@ void input_patient(struct patient_queue *patient_queue) {
     break;
   case 'N':
   case 'n':
+    patient.vitals = NULL;
     break;
   }
+
+  patient.symptoms_head = NULL;
 
   add_patient_to_queue(patient_queue, patient);
   print_queue(patient_queue);

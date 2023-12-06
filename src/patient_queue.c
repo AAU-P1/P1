@@ -10,15 +10,13 @@ struct patient_node *insert_tail(struct patient_node *cl, void *el) {
     new_node->data = el;
     new_node->next = new_node;
     return new_node;
-  } else {
-    printf("list populated\n");
-    struct patient_node *new_node =
-        (struct patient_node *)malloc(sizeof(struct patient_node));
-    new_node->data = el;
-    new_node->next = cl->next;
-    cl->next = new_node;
-    return cl;
   }
+  printf("list populated\n");
+  struct patient_node *new_node =
+      (struct patient_node *)malloc(sizeof(struct patient_node));
+  new_node->data = el;
+  new_node->next = cl->next;
+  cl->next = new_node;
   return cl;
 }
 

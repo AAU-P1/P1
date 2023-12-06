@@ -192,7 +192,8 @@ void input_vitals(struct Patient *patient) {
       oxygen_saturation_found = true;
     }
   }
-  patient->vitals->systolic_blood_pressure = input_int("Enter systolic blood preasure");
+
+  patient->vitals->systolic_blood_pressure = input_int("Enter the systolic blood preasure");
 
 
 }

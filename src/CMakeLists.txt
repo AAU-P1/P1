@@ -8,13 +8,10 @@ add_library(vitals vitals.c)
 target_include_directories(vitals PUBLIC .)
 
 add_library(triage_level triage_level.c)
-target_include_directories(triage_level PUBLIC .)
 
 add_executable(main main.c)
 
-add_subdirectory(symptoms)
-
-target_link_libraries(main patient_queue symptoms vitals triage_level)
+target_link_libraries(main patient_queue triage_level symptoms vitals)
 
 # if(WIN32 OR MSVC)
 #         add_subdirectory(pdcurses)

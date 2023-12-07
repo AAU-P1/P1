@@ -9,7 +9,13 @@ target_include_directories(vitals PUBLIC .)
 
 add_library(triage_level triage_level.c)
 
-add_executable(main main.c)
+add_executable(main main.c
+        symptoms/26_skin_and_mucous_membrane_symptoms.c
+        symptoms/26_skin_and_mucous_membrane_symptoms.h
+        symptoms/27_jaundice_and_or_ascites.c
+        symptoms/27_jaundice_and_or_ascites.h
+        symptoms/28_catheter_stoma_or_feeding_tube_problems.c
+        symptoms/28_catheter_stoma_or_feeding_tube_problems.h)
 
 target_link_libraries(main patient_queue triage_level symptoms vitals)
 

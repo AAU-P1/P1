@@ -12,6 +12,8 @@ target_include_directories(triage_level PUBLIC .)
 
 add_executable(main main.c)
 
+add_subdirectory(symptoms)
+
 target_link_libraries(main patient_queue symptoms vitals triage_level)
 
 # if(WIN32 OR MSVC)

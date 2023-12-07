@@ -19,4 +19,3 @@ enum Triage_Level get_symptoms_Catheter_stoma_or_feeding_tube_problems_triage(st
 
     return triage_level;
 }
-1

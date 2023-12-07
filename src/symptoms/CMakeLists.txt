@@ -1,2 +1,2 @@
-add_library(abstinence abstinence.c)
+add_library(abstinence 1_abstinence.c)
 target_include_directories(abstinence PUBLIC .)

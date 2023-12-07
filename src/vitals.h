@@ -1,3 +1,5 @@
+#ifndef VITALS_H
+#define VITALS_H
 #include "triage_level.h"
 #include <stdbool.h>
 
@@ -16,3 +18,5 @@ struct Vitals {
 };
 
 enum Triage_Level get_vital_triage(struct Vitals vitals);
+
+#endif

@@ -1,4 +1,5 @@
 #include "triage_level.h"
+#include "patient_queue.h"
 #include "symptoms.h"
 #include "vitals.h"
 #include <stdio.h>
@@ -8,12 +9,11 @@ enum Triage_Level get_triage(struct Patient patient) {
 
   enum Triage_Level triage_level = Blue;
 
-  if (patient.vitals != NULL) {
-    printf("Vitals not null\n");
+  if (patient.vitals) {
     triage_level = get_vital_triage(*patient.vitals);
   }
 
-  if (patient.symptoms_head != NULL) {
+  if (patient.symptoms_head) {
     enum Triage_Level symptoms_triage =
         get_symptoms_triage(*patient.symptoms_head);
 

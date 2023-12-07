@@ -15,10 +15,9 @@ int main(void) {
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL};
 
   char choice;
-  while (choice != 'q') {
-
+  while (true) {
     printf("(T)riage new patient      (I)nput patient from file       (R)emove "
-           "Patient         (D)isplay Queue\n");
+           "Patient         (D)isplay Queue        (Q)uit\n");
     choice = getchar();
     clearInputBuffer();
 
@@ -36,6 +35,11 @@ int main(void) {
       break;
     case 'D':
     case 'd':
+      break;
+    case 'Q':
+    case 'q':
+      printf("Bye!\n");
+      exit(1);
       break;
     default:
       printf("Invalid input try again");

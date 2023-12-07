@@ -8,6 +8,7 @@ add_library(vitals vitals.c)
 target_include_directories(vitals PUBLIC .)
 
 add_library(triage_level triage_level.c)
+target_include_directories(triage_level PUBLIC .)
 
 add_executable(main main.c)
 

@@ -16,19 +16,6 @@ struct patient_node {
   struct patient_node *next;
 };
 
-enum Gender { Male, Female };
-
-struct Patient {
-  char name[100];
-  int age;
-  int id;
-  enum Gender gender;
-  struct Vitals *vitals;
-  struct symptom_node *symptoms_head;
-};
-
-enum Triage_Level get_triage(struct Patient patient);
-
 void add_patient_to_queue(struct patient_queue *patient_queue,
                           struct Patient patient);
 

@@ -1,4 +1,5 @@
 #include "patient_queue.h"
+#include "triage_level.h"
 #include <stdio.h>
 #include <stdlib.h>
 

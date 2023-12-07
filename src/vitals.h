@@ -1,4 +1,4 @@
-#include "patient_queue.h"
+#include "triage_level.h"
 #include <stdbool.h>
 
 enum Airway { Blocked, Free, Inspiratory_stridor };

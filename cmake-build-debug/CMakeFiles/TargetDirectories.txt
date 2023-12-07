@@ -1,0 +1,9 @@
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/patient_queue.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/symptoms.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/vitals.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/triage_level.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/main.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/edit_cache.dir
+/Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir

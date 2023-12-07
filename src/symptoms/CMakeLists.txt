@@ -1,2 +1,3 @@
 add_library(abstinence 1_abstinence.c)
+add_library(Skin_and_mucous_membrane 26_skin_and_mucous_membrane_symptoms.c)
 target_include_directories(abstinence PUBLIC .)

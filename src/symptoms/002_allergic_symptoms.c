@@ -1,4 +1,4 @@
-#include "2_allergic_symptoms.h"
+#include "002_allergic_symptoms.h"
 
 enum Triage_Level get_symptoms_allergic_symptoms(struct Allergic allergic) {
   enum Triage_Level triage_level = Green;

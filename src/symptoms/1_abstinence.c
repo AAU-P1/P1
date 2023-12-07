@@ -1,4 +1,4 @@
-#include "abstinence.h"
+#include "1_abstinence.h"
 
 enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence) {
   enum Triage_Level triage_level = Green;

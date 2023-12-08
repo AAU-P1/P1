@@ -47,3 +47,5 @@ enum Triage_Level get_vital_triage(struct Vitals vitals) {
 
   return triage_level;
 }
+
+

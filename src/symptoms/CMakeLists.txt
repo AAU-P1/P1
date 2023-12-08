@@ -10,3 +10,4 @@ add_library(symptoms_triage
   23_arr
   )
 target_include_directories(abstinence PUBLIC .)
+target_include_directories(mental_symptom PUBLIC .)

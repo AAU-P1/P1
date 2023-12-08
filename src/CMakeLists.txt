@@ -8,10 +8,8 @@ target_include_directories(vitals PUBLIC .)
 add_library(triage_level triage_level.c)
 target_include_directories(triage_level PUBLIC .)
 
-add_library(gui gui.c)
-target_include_directories(gui PUBLIC .)
-
 add_subdirectory(symptoms)
+add_subdirectory(view)
 
 add_executable(main main.c)
 

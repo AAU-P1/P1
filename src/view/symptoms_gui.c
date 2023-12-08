@@ -4,6 +4,7 @@ void input_symptoms(struct symptom_node *sn) {
 
   int choice;
 
+  clear_screen();
   input_int_with_range("Please choose one of the following:\n(1) or ...",
                        &choice, 1, 1);
   switch (choice) {

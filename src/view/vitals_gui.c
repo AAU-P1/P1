@@ -2,9 +2,8 @@
 #include "gui.h"
 
 void input_vitals(struct Vitals *vitals) {
-
   char choice;
-
+  clear_screen();
   input_char(&choice,
              "Is the airway: (B)locked (F)ree or (I)nspiratory Stridor?",
              "BbFfIi");
@@ -25,6 +24,7 @@ void input_vitals(struct Vitals *vitals) {
   }
 
   // Get patient_vitals Kol
+  clear_screen();
   input_char(&choice, "Is the patient with kol? (Y)es  (N)o", "YyNn");
   switch (choice) {
   case 'Y':
@@ -37,9 +37,11 @@ void input_vitals(struct Vitals *vitals) {
     break;
   }
 
+  clear_screen();
   input_int("Input Oxygen Saturation", &vitals->oxygen_saturation);
 
   // Get patient_vitals Airway
+  clear_screen();
   input_char(&choice, "Is the patient with oxygen? (Y)es  (N)o", "YyNn");
   switch (choice) {
   case 'Y':
@@ -52,13 +54,18 @@ void input_vitals(struct Vitals *vitals) {
     break;
   }
 
+  clear_screen();
   input_int("Input Respiration Frequency", &vitals->respiration_frequency);
 
+  clear_screen();
   input_int("Input Pulse", &vitals->pulse);
 
+  clear_screen();
   input_int("Input Systolic Blood Pressure", &vitals->systolic_blood_pressure);
 
+  clear_screen();
   input_int("Input Glasgow Coma Scale Number", &vitals->glasgow_coma_scale);
 
+  clear_screen();
   input_double("Input Temperature Celcius", &vitals->temperature_celcius);
 }

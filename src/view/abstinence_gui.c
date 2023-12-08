@@ -8,6 +8,7 @@ struct Abstinence *input_abstinence_symptom() {
       (struct Abstinence *)malloc(sizeof(struct Abstinence));
 
   char choice;
+  clear_screen();
   input_char(&choice,
              "Does the patient have abstinent cramps? (O)ngoing, "
              "Now_(D)iscontinued (B)y_Previous_Contact (N)one",
@@ -32,6 +33,7 @@ struct Abstinence *input_abstinence_symptom() {
     break;
   }
 
+  clear_screen();
   input_char(&choice,
              "Is the patient restless from abstinence "
              "Yes_(W)ith_Confusion_or_Halucination, (Y)es, (E)asy_or_None ",

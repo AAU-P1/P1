@@ -4,6 +4,8 @@
 #include "triage_level.h"
 #include "view/gui.h"
 #include "view/patient_queue_gui.h"
+#include "view/symptoms_gui.h"
+#include "view/vitals_gui.h"
 #include "vitals.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +22,7 @@ int main(void) {
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};
 
   char choice;
+  clear_screen();
   while (true) {
     printf("(T)riage new patient      (I)nput patient from file       (R)emove "
            "Patient         (D)isplay Queue        (Q)uit\n");
@@ -57,6 +60,8 @@ int main(void) {
 
 void remove_patient(struct patient_queue *pq) {
   int id;
+  clear_screen();
+  print_queue(pq);
   input_int("Input id of patient", &id);
   remove_patient_from_queue(pq, id);
 }
@@ -66,13 +71,16 @@ struct Patient input_patient() {
   struct Patient patient;
 
   // Get patient Name
+  clear_screen();
   input_string("input patient name", patient.name);
 
   // Get patient Age
+  clear_screen();
   input_int("Input patient age", &patient.age);
 
   // Get patient Gender
   char choice;
+  clear_screen();
   input_char(&choice, "Input patient gender, (M)ale or (F)emale", "MmFf");
   switch (choice) {
   case 'M':
@@ -86,6 +94,7 @@ struct Patient input_patient() {
   }
 
   // Get patient Vitals
+  clear_screen();
   input_char(&choice, "Would you like to input Vital Parameters? (Y)es  (N)o",
              "YyNn");
   switch (choice) {
@@ -101,6 +110,7 @@ struct Patient input_patient() {
   }
 
   // Get patient Symptoms
+  clear_screen();
   input_char(&choice, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
   switch (choice) {
   case 'Y':

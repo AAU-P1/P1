@@ -1,0 +1,22 @@
+#ifndef SYM_SKIN_AND_MUCOUS_MEMBRANE
+#define SYM_SKIN_AND_MUCOUS_MEMBRANE
+#include "../triage_level.h"
+#include <stdbool.h>
+
+enum Skin_and_mucous_membrane_symptoms_rash_debut { SAMMSRD_over_hours, SAMMSRD_over_days, SAMMSRD_none };
+enum Skin_and_mucous_membrane_symptoms_infection_or_inflammation { SAMMSIOI_fast_progressing_miscoloring_warmth_and_swelling_or_affected_condition, SAMMSIOI_suspected_deep_wound_infection_or_lymphangitis, SAMMSIOI_none, SAMMSIOI_shallow_wound_infection_or_swelling_joints};
+enum Skin_and_mucous_membrane_symptoms_urticaria { SAMMSU_universal, SAMMSU_outspread, SAMMSU_local, SAMMSU_none };
+enum Skin_and_mucous_membrane_symptoms_absces_amount_and_location { SAMMSAAAL_multiple_and_near_joints, SAMMSAAAL_single_absces };
+
+struct Skin_and_mucous_membrane {
+    bool SAMM_suspected_meningitis;
+    bool SAMM_can_skin_loosen_by_simple_friction_and_leave_open_liquid_wounds;
+    enum Skin_and_mucous_membrane_symptoms_rash_debut rash_debut;
+    enum Skin_and_mucous_membrane_symptoms_infection_or_inflammation infection_or_inflammation;
+    enum Skin_and_mucous_membrane_symptoms_urticaria urticaria;
+    enum Skin_and_mucous_membrane_symptoms_absces_amount_and_location absces_amount_and_location;
+};
+
+enum Triage_Level get_symptoms_Skin_and_mucous_membrane_triage(struct Skin_and_mucous_membrane skin_and_mucous_membrane);
+
+#endif

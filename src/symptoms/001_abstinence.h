@@ -3,8 +3,13 @@
 #include "../triage_level.h"
 #include <stdbool.h>
 
-enum Abstinence_cramps { Ongoing, Now_discontinued, By_previous_contact, None };
-enum Abstinence_restless { Yes_w_conf_or_haluc, Yes, Easy_or_none };
+enum Abstinence_cramps {
+  AC_ongoing,
+  AC_now_discontinued,
+  AC_by_previous_contact,
+  AC_none
+};
+enum Abstinence_restless { AC_yes_w_conf_or_haluc, AC_yes, AC_easy_or_none };
 
 struct Abstinence {
   enum Abstinence_cramps cramps;

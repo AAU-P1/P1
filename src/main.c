@@ -2,7 +2,6 @@
 #include "symptoms.h"
 #include "triage_level.h"
 #include "vitals.h"
-#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,9 +9,10 @@
 void clearInputBuffer();
 struct Patient input_patient();
 void input_vitals(struct Vitals *vitals);
+void remove_patient(struct patient_queue *pq);
 int main(void) {
 
-  struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL};
+  struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};
 
   char choice;
   while (true) {
@@ -32,9 +32,12 @@ int main(void) {
       break;
     case 'R':
     case 'r':
+      remove_patient(&patient_queue);
+      print_queue(&patient_queue);
       break;
     case 'D':
     case 'd':
+      print_queue(&patient_queue);
       break;
     case 'Q':
     case 'q':
@@ -100,6 +103,12 @@ void input_string(char *message, char *dest) {
       return;
     }
   }
+}
+
+void remove_patient(struct patient_queue *pq) {
+  int id;
+  input_int("Input id of patient", &id);
+  remove_patient_from_queue(pq, id);
 }
 
 struct Patient input_patient() {

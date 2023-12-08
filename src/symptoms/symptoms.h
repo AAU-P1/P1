@@ -1,7 +1,7 @@
 #ifndef SYMPTOMS_H
 #define SYMPTOMS_H
 
-#include "triage_level.h"
+#include "../triage_level.h"
 
 struct symptom_node {
   void *data;

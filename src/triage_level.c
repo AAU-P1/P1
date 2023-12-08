@@ -12,7 +12,7 @@ enum Triage_Level get_triage(struct Patient patient) {
 
   if (patient.symptoms_head) {
     enum Triage_Level symptoms_triage =
-        get_symptoms_triage(*patient.symptoms_head);
+        get_symptoms_triage(patient.symptoms_head);
 
     if (triage_level > symptoms_triage) {
       return symptoms_triage;

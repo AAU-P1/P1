@@ -1,6 +1,7 @@
 #include "gui.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 void input_int(char *message, int *dest) {
   while (true) {
     printf("%s\n", message);
@@ -74,4 +75,12 @@ void clearInputBuffer() {
   int c;
   while ((c = getchar()) != '\n' && c != EOF) {
   }
+}
+
+void clear_screen() {
+#ifdef _WIN32
+  system("cls");
+#else
+  system("clear");
+#endif
 }

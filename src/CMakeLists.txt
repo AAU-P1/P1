@@ -1,23 +1,18 @@
 add_library(patient_queue patient_queue.c)
 target_include_directories(patient_queue PUBLIC .)
 
-add_library(symptoms symptoms.c)
-target_include_directories(symptoms PUBLIC .)
 
 add_library(vitals vitals.c)
 target_include_directories(vitals PUBLIC .)
 
 add_library(triage_level triage_level.c)
+target_include_directories(triage_level PUBLIC .)
 
-add_executable(main main.c
-        symptoms/26_skin_and_mucous_membrane_symptoms.c
-        symptoms/26_skin_and_mucous_membrane_symptoms.h
-        symptoms/27_jaundice_and_or_ascites.c
-        symptoms/27_jaundice_and_or_ascites.h
-        symptoms/28_catheter_stoma_or_feeding_tube_problems.c
-        symptoms/28_catheter_stoma_or_feeding_tube_problems.h)
+add_subdirectory(symptoms)
 
-target_link_libraries(main patient_queue triage_level symptoms vitals)
+add_executable(main main.c)
+
+target_link_libraries(main patient_queue triage_level symptoms vitals symptoms_triage)
 
 # if(WIN32 OR MSVC)
 #         add_subdirectory(pdcurses)

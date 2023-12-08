@@ -1,5 +1,5 @@
 #include "triage_level.h"
-#include "symptoms.h"
+#include "symptoms/symptoms.h"
 #include "vitals.h"
 
 enum Triage_Level get_triage(struct Patient patient) {

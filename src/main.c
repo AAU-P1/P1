@@ -1,8 +1,9 @@
-#include "gui.h"
 #include "patient_queue.h"
 #include "symptoms/001_abstinence.h"
 #include "symptoms/symptoms.h"
 #include "triage_level.h"
+#include "view/gui.h"
+#include "view/patient_queue_gui.h"
 #include "vitals.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -113,17 +114,4 @@ struct Patient input_patient() {
   }
 
   return patient;
-}
-
-void input_symptoms(struct symptom_node *sn) {
-  int choice;
-
-  input_int_with_range("Please choose one of the following:\n(1) or ...",
-                       &choice, 1, 1);
-  switch (choice) {
-  case 1:
-    sn->symptom_id = choice;
-    sn->data = input_abstinence_symptom();
-    break;
-  }
 }

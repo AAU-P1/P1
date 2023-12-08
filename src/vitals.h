@@ -18,6 +18,5 @@ struct Vitals {
 };
 
 enum Triage_Level get_vital_triage(struct Vitals vitals);
-void input_vitals(struct Vitals *vitals);
 
 #endif

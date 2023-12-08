@@ -17,5 +17,5 @@ struct Abstinence {
 };
 
 enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence);
-
+struct Abstinence *input_abstinence_symptom();
 #endif

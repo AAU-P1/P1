@@ -1,5 +1,7 @@
+#include "gui.h"
 #include "patient_queue.h"
-#include "symptoms.h"
+#include "symptoms/001_abstinence.h"
+#include "symptoms/symptoms.h"
 #include "triage_level.h"
 #include "vitals.h"
 #include <stdio.h>
@@ -10,6 +12,8 @@ void clearInputBuffer();
 struct Patient input_patient();
 void input_vitals(struct Vitals *vitals);
 void remove_patient(struct patient_queue *pq);
+void input_symptoms(struct symptom_node *sn);
+struct Abstinence *input_abstinence_symptom();
 int main(void) {
 
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};
@@ -46,61 +50,6 @@ int main(void) {
       break;
     default:
       printf("Invalid input try again");
-    }
-  }
-}
-
-void input_int(char *message, int *dest) {
-  while (true) {
-    printf("%s\n", message);
-    int res = scanf("%d", dest);
-    clearInputBuffer();
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      return;
-    }
-  }
-}
-
-void input_double(char *message, double *dest) {
-  while (true) {
-    printf("%s\n", message);
-    int res = scanf("%lf", dest);
-    clearInputBuffer();
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      return;
-    }
-  }
-}
-
-void input_char(char *choice, char *message, char *valid_chars) {
-  while (true) {
-    printf("%s\n", message);
-    char c = getchar();
-    clearInputBuffer();
-    int i = 0;
-    while (valid_chars[i] != '\0') {
-      if (c == valid_chars[i]) {
-        *choice = c;
-        return;
-      }
-      ++i;
-    }
-    printf("Invalid input. Try again!\n");
-  }
-}
-
-void input_string(char *message, char *dest) {
-  while (true) {
-    printf("%s\n", message);
-    int res = scanf("%s", dest);
-    if (res != 1) {
-      printf("Invalid input. Try again!\n");
-    } else {
-      return;
     }
   }
 }
@@ -150,72 +99,31 @@ struct Patient input_patient() {
     break;
   }
 
+  // Get patient Symptoms
+  input_char(&choice, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
+  switch (choice) {
+  case 'Y':
+  case 'y':
+    input_symptoms(patient.symptoms_head);
+    break;
+  case 'N':
+  case 'n':
+    patient.symptoms_head = NULL;
+    break;
+  }
+
   return patient;
 }
 
-void input_vitals(struct Vitals *vitals) {
+void input_symptoms(struct symptom_node *sn) {
+  int choice;
 
-  char choice;
-
-  input_char(&choice,
-             "Is the airway: (B)locked (F)ree or (I)nspiratory Stridor?",
-             "BbFfIi");
-
+  input_int_with_range("Please choose one of the following:\n(1) or ...",
+                       &choice, 1, 1);
   switch (choice) {
-  case 'B':
-  case 'b':
-    vitals->airway = Blocked;
+  case 1:
+    sn->symptom_id = choice;
+    sn->data = input_abstinence_symptom();
     break;
-  case 'F':
-  case 'f':
-    vitals->airway = Free;
-    break;
-  case 'I':
-  case 'i':
-    vitals->airway = Inspiratory_stridor;
-    break;
-  }
-
-  // Get patient_vitals Kol
-  input_char(&choice, "Is the patient with kol? (Y)es  (N)o", "YyNn");
-  switch (choice) {
-  case 'Y':
-  case 'y':
-    vitals->with_kol = true;
-    break;
-  case 'N':
-  case 'n':
-    vitals->with_kol = false;
-    break;
-  }
-
-  input_int("Input Oxygen Saturation", &vitals->oxygen_saturation);
-
-  // Get patient_vitals Airway
-  input_char(&choice, "Is the patient with oxygen? (Y)es  (N)o", "YyNn");
-  switch (choice) {
-  case 'Y':
-  case 'y':
-    vitals->with_oxygen = true;
-    break;
-  case 'N':
-  case 'n':
-    vitals->with_oxygen = false;
-    break;
-  }
-
-  input_int("Input Respiration Frequency", &vitals->respiration_frequency);
-
-  input_int("Input Pulse", &vitals->pulse);
-
-  input_int("Input Systolic Blood Pressure", &vitals->systolic_blood_pressure);
-
-  input_int("Input Glasgow Coma Scale Number", &vitals->glasgow_coma_scale);
-
-  input_double("Input Temperature Celcius", &vitals->temperature_celcius);
-}
-void clearInputBuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF) {
   }
 }

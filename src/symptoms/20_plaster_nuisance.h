@@ -1,0 +1,8 @@
+//
+// Created by Mathias Birkholm on 07/12/2023.
+//
+
+#ifndef PROJECT1_20_PLASTER_NUISANCE_H
+#define PROJECT1_20_PLASTER_NUISANCE_H
+
+#endif //PROJECT1_20_PLASTER_NUISANCE_H

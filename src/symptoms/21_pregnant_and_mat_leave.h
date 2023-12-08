@@ -1,0 +1,8 @@
+//
+// Created by Mathias Birkholm on 07/12/2023.
+//
+
+#ifndef PROJECT1_21_PREGNANT_AND_MAT_LEAVE_H
+#define PROJECT1_21_PREGNANT_AND_MAT_LEAVE_H
+
+#endif //PROJECT1_21_PREGNANT_AND_MAT_LEAVE_H

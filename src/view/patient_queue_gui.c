@@ -23,14 +23,15 @@ void print_circular_patient_list(struct patient_node *cl) {
 
 void print_queue(struct patient_queue *patient_queue) {
   clear_screen();
-  printf("RED:\n");
+  printf("\nRED:\n");
   print_circular_patient_list(patient_queue->red_head);
-  printf("ORANGE:\n");
+  printf("\nORANGE:\n");
   print_circular_patient_list(patient_queue->orange_head);
-  printf("YELLOW:\n");
+  printf("\nYELLOW:\n");
   print_circular_patient_list(patient_queue->yellow_head);
-  printf("GREEN:\n");
+  printf("\nGREEN:\n");
   print_circular_patient_list(patient_queue->green_head);
-  printf("BLUE:\n");
+  printf("\nBLUE:\n");
   print_circular_patient_list(patient_queue->blue_head);
+  printf("\n");
 }

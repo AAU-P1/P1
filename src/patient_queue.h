@@ -26,8 +26,4 @@ void remove_patient_from_queue(struct patient_queue *pq, int p_id);
 
 struct patient_node *remove_patient_from_list(struct patient_node *sl,
                                               int patient_id);
-void print_patient(struct Patient *patient);
-void print_circular_patient_list(struct patient_node *cl);
-void print_queue(struct patient_queue *patient_queue);
-
 #endif

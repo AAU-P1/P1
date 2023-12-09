@@ -1,5 +1,7 @@
 #include "002_allergic_symptoms.h"
 
+// ################################## MODEL ##################################
+
 enum Triage_Level get_symptoms_allergic_symptoms(struct Allergic allergic) {
   enum Triage_Level triage_level = Green;
 
@@ -25,3 +27,5 @@ enum Triage_Level get_symptoms_allergic_symptoms(struct Allergic allergic) {
 
   return triage_level;
 }
+
+// ################################ CONTROLLER ################################

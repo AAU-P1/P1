@@ -1,6 +1,6 @@
 #ifndef VITALS_H
 #define VITALS_H
-#include "triage_level.h"
+#include "patient.h"
 #include <stdbool.h>
 
 enum Airway { Blocked, Free, Inspiratory_stridor };
@@ -18,5 +18,6 @@ struct Vitals {
 };
 
 enum Triage_Level get_vital_triage(struct Vitals vitals);
+void input_vitals(struct Vitals *vitals);
 
 #endif

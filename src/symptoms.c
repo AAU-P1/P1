@@ -1,6 +1,8 @@
 #include "symptoms.h"
-#include "001_abstinence.h"
+#include "controller.h"
 #include <stdlib.h>
+
+// ################################## MODEL ##################################
 
 enum Triage_Level get_symptoms_triage(struct symptom_node *sn) {
   enum Triage_Level triage_level = Blue;
@@ -44,4 +46,21 @@ struct symptom_node *add_symptom(struct symptom_node *cl, void *el,
   }
   cl->next = new_node;
   return cl;
+}
+
+// ################################## VIEW ##################################
+
+void input_symptoms(struct symptom_node *sn) {
+
+  int choice;
+
+  clear_screen();
+  input_int_with_range("Please choose one of the following:\n(1) or ...",
+                       &choice, 1, 1);
+  switch (choice) {
+  case 1:
+    sn->symptom_id = choice;
+    sn->data = input_abstinence_symptom();
+    break;
+  }
 }

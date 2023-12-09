@@ -1,5 +1,5 @@
-#ifndef GUI
-#define GUI
+#ifndef CONTROLLER
+#define CONTROLLER
 
 void input_int(char *message, int *dest);
 void input_int_with_range(char *message, int *dest, int valid_low,

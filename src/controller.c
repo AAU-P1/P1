@@ -1,7 +1,8 @@
-#include "gui.h"
+#include "controller.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 void input_int(char *message, int *dest) {
   while (true) {
     printf("%s\n", message);

@@ -1,7 +1,9 @@
 #ifndef SYM_ABSTINENCE
 #define SYM_ABSTINENCE
-#include "../triage_level.h"
+#include "../patient.h"
 #include <stdbool.h>
+
+// ################################## MODEL ##################################
 
 enum Abstinence_cramps {
   AC_ongoing,
@@ -17,5 +19,8 @@ struct Abstinence {
 };
 
 enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence);
+
+// ################################ CONTROLLER ################################
+
 struct Abstinence *input_abstinence_symptom();
 #endif

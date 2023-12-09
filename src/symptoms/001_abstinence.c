@@ -30,6 +30,27 @@ enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence) {
   return triage_level;
 }
 
+/*
+ * @param abstinence: abstinence struct to be converted
+ * Converts a abstinence struct to a string, so it can be saved
+ */
+char *symptoms_abstinence_stringify(struct Abstinence abstinence) {
+  // Implement function that returns string from abstinence
+  return "";
+}
+
+/*
+ * @param str: string to be converted
+ * Converts a string into an abstinence struct
+ */
+struct Abstinence *symptoms_abstinence_parse_string(char *str) {
+  // Implement function that returns abstinence struct from string
+  struct Abstinence *abstinence =
+      (struct Abstinence *)malloc(sizeof(struct Abstinence));
+
+  return abstinence;
+}
+
 // ################################ CONTROLLER ################################
 
 struct Abstinence *input_abstinence_symptom() {

@@ -1,6 +1,8 @@
 #include "vitals.h"
 #include "controller.h"
 
+// ################################## MODEL ##################################
+
 enum Triage_Level get_vital_triage(struct Vitals vitals) {
   enum Triage_Level triage_level = Green;
 
@@ -48,6 +50,8 @@ enum Triage_Level get_vital_triage(struct Vitals vitals) {
 
   return triage_level;
 }
+
+// ################################ CONTROLLER ################################
 
 void input_vitals(struct Vitals *vitals) {
   char choice;

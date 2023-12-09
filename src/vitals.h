@@ -3,6 +3,8 @@
 #include "patient.h"
 #include <stdbool.h>
 
+// ################################## MODEL ##################################
+
 enum Airway { Blocked, Free, Inspiratory_stridor };
 
 struct Vitals {
@@ -18,6 +20,9 @@ struct Vitals {
 };
 
 enum Triage_Level get_vital_triage(struct Vitals vitals);
+
+// ################################ CONTROLLER ################################
+
 void input_vitals(struct Vitals *vitals);
 
 #endif

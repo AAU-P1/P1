@@ -1,5 +1,5 @@
-#ifndef CONTROLLER
-#define CONTROLLER
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 void input_int(char *message, int *dest);
 void input_int_with_range(char *message, int *dest, int valid_low,
@@ -10,4 +10,4 @@ void input_string(char *message, char *dest);
 void clearInputBuffer();
 void clear_screen();
 
-#endif // !GUI
+#endif

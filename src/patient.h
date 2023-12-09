@@ -5,18 +5,19 @@
 
 enum Gender { Male, Female };
 
+enum Triage_Level { Red, Orange, Yellow, Green, Blue };
+
 struct Patient {
   char name[100];
   int age;
   int id;
+  enum Triage_Level triage_level;
   enum Gender gender;
   struct Vitals *vitals;
   struct symptom_node *symptoms_head;
 };
 
-enum Triage_Level { Red, Orange, Yellow, Green, Blue };
-
-enum Triage_Level get_triage(struct Patient patient);
+void get_triage(struct Patient patient);
 
 struct patient_queue {
   struct patient_node *red_head;

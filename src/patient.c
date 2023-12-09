@@ -76,9 +76,9 @@ void add_patient_to_queue(struct patient_queue *patient_queue,
   new_patient->id = patient_queue->current_id;
   patient_queue->current_id++;
 
-  enum Triage_Level patient_triage_level = get_triage(*new_patient);
+  get_triage(*new_patient);
 
-  switch (patient_triage_level) {
+  switch (patient.triage_level) {
   case Red:
     patient_queue->red_head = insert_tail(patient_queue->red_head, new_patient);
     break;
@@ -136,24 +136,22 @@ void print_queue(struct patient_queue *patient_queue) {
   printf("\n");
 }
 
-enum Triage_Level get_triage(struct Patient patient) {
+void get_triage(struct Patient patient) {
 
-  enum Triage_Level triage_level = Blue;
+  patient.triage_level = Blue;
 
   if (patient.vitals) {
-    triage_level = get_vital_triage(*patient.vitals);
+    patient.triage_level = get_vital_triage(*patient.vitals);
   }
 
   if (patient.symptoms_head) {
     enum Triage_Level symptoms_triage =
         get_symptoms_triage(patient.symptoms_head);
 
-    if (triage_level > symptoms_triage) {
-      return symptoms_triage;
+    if (patient.triage_level > symptoms_triage) {
+      patient.triage_level = symptoms_triage;
     }
   }
-
-  return triage_level;
 }
 
 // ################################ CONTROLLER ################################

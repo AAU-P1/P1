@@ -60,44 +60,30 @@ struct patient_node *remove_patient_from_list(struct patient_node *sl,
 }
 
 void add_patient_to_queue(struct patient_queue *patient_queue,
-                          struct Patient patient) {
+                          struct Patient *patient) {
 
-  struct Patient *new_patient =
-      (struct Patient *)malloc(sizeof(struct Patient));
-
-  // Check if memory allocation is successful
-  if (new_patient == NULL) {
-    printf("Error: Unable to allocate memory for patient\n");
-    exit(EXIT_FAILURE);
-  }
-
-  // Copy patient data
-  *new_patient = patient;
-
-  new_patient->id = patient_queue->current_id;
+  patient->id = patient_queue->current_id;
   patient_queue->current_id++;
 
-  get_triage(*new_patient);
+  get_triage(*patient);
 
-  switch (patient.triage_level) {
+  switch (patient->triage_level) {
   case Red:
-    patient_queue->red_head = insert_tail(patient_queue->red_head, new_patient);
+    patient_queue->red_head = insert_tail(patient_queue->red_head, patient);
     break;
   case Orange:
     patient_queue->orange_head =
-        insert_tail(patient_queue->orange_head, new_patient);
+        insert_tail(patient_queue->orange_head, patient);
     break;
   case Yellow:
     patient_queue->yellow_head =
-        insert_tail(patient_queue->yellow_head, new_patient);
+        insert_tail(patient_queue->yellow_head, patient);
     break;
   case Green:
-    patient_queue->green_head =
-        insert_tail(patient_queue->green_head, new_patient);
+    patient_queue->green_head = insert_tail(patient_queue->green_head, patient);
     break;
   case Blue:
-    patient_queue->blue_head =
-        insert_tail(patient_queue->blue_head, new_patient);
+    patient_queue->blue_head = insert_tail(patient_queue->blue_head, patient);
     break;
   }
 }
@@ -157,17 +143,23 @@ void get_triage(struct Patient patient) {
 
 // ################################ CONTROLLER ################################
 
-struct Patient input_patient() {
+struct Patient *input_patient() {
 
-  struct Patient patient;
+  struct Patient *patient = (struct Patient *)malloc(sizeof(struct Patient));
+
+  // Check if memory allocation is successful
+  if (patient == NULL) {
+    printf("Error: Unable to allocate memory for patient\n");
+    exit(EXIT_FAILURE);
+  }
 
   // Get patient Name
   clear_screen();
-  input_string("input patient name", patient.name);
+  input_string("input patient name", patient->name);
 
   // Get patient Age
   clear_screen();
-  input_int("Input patient age", &patient.age);
+  input_int("Input patient age", &patient->age);
 
   // Get patient Gender
   char choice;
@@ -176,11 +168,11 @@ struct Patient input_patient() {
   switch (choice) {
   case 'M':
   case 'm':
-    patient.gender = Male;
+    patient->gender = Male;
     break;
   case 'F':
   case 'f':
-    patient.gender = Female;
+    patient->gender = Female;
     break;
   }
 
@@ -191,12 +183,12 @@ struct Patient input_patient() {
   switch (choice) {
   case 'Y':
   case 'y':
-    patient.vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
-    input_vitals(patient.vitals);
+    patient->vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
+    input_vitals(patient->vitals);
     break;
   case 'N':
   case 'n':
-    patient.vitals = NULL;
+    patient->vitals = NULL;
     break;
   }
 
@@ -206,11 +198,11 @@ struct Patient input_patient() {
   switch (choice) {
   case 'Y':
   case 'y':
-    input_symptoms(patient.symptoms_head);
+    patient->symptoms_head = input_symptoms(patient->symptoms_head);
     break;
   case 'N':
   case 'n':
-    patient.symptoms_head = NULL;
+    patient->symptoms_head = NULL;
     break;
   }
 

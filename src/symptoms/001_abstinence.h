@@ -1,6 +1,6 @@
 #ifndef SYM_ABSTINENCE
 #define SYM_ABSTINENCE
-#include "../patient.h"
+#include "../triage_level.h"
 #include <stdbool.h>
 
 // ################################## MODEL ##################################

@@ -1,11 +1,10 @@
 #ifndef PATIENT_H
 #define PATIENT_H
+#include "triage_level.h"
 
 // ################################## MODEL ##################################
 
 enum Gender { Male, Female };
-
-enum Triage_Level { Red, Orange, Yellow, Green, Blue };
 
 struct Patient {
   char name[100];

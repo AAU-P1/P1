@@ -10,8 +10,11 @@ target_include_directories(symptoms PUBLIC .)
 add_library(controller controller.c)
 target_include_directories(controller PUBLIC .)
 
+add_library(triage_level triage_level.c)
+target_include_directories(triage_level PUBLIC .)
+
 add_subdirectory(symptoms)
 
 add_executable(main main.c)
 
-target_link_libraries(main controller symptoms symptoms_triage vitals patient)
+target_link_libraries(main controller patient symptoms symptoms_triage vitals triage_level)

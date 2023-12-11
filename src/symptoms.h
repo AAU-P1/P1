@@ -1,9 +1,9 @@
 #ifndef SYMPTOMS_H
 #define SYMPTOMS_H
 
-#include "patient.h"
 #include "symptoms/001_abstinence.h"
 #include "symptoms/002_allergic_symptoms.h"
+#include "triage_level.h"
 
 // ################################## MODEL ##################################
 

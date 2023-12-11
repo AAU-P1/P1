@@ -1,6 +1,6 @@
 #ifndef VITALS_H
 #define VITALS_H
-#include "patient.h"
+#include "triage_level.h"
 #include <stdbool.h>
 
 // ################################## MODEL ##################################

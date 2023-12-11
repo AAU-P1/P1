@@ -1,6 +1,6 @@
 #ifndef SYM_ALLERGIC
 #define SYM_ALLERGIC
-#include "../patient.h"
+#include "../triage_level.h"
 #include <stdbool.h>
 
 // ################################## MODEL ##################################

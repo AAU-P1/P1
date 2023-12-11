@@ -1,6 +1,7 @@
 #include "patient.h"
 #include "controller.h"
 #include "symptoms.h"
+#include "triage_level.h"
 #include "vitals.h"
 #include <stdbool.h>
 #include <stdio.h>

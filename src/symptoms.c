@@ -34,19 +34,29 @@ enum Triage_Level triage_from_symptom(struct symptom_node *sn) {
   return Blue;
 }
 
-struct symptom_node *add_symptom(struct symptom_node *cl, void *el,
+struct symptom_node *add_symptom(struct symptom_node *sl, void *el,
                                  int symptom_id) {
   struct symptom_node *new_node =
       (struct symptom_node *)malloc(sizeof(struct symptom_node));
+
+  struct symptom_node *cur;
+
   new_node->data = el;
   new_node->symptom_id = symptom_id;
   new_node->next = NULL;
 
-  if (cl == NULL) {
+  if (sl == NULL) {
     return new_node;
   }
-  cl->next = new_node;
-  return cl;
+
+  cur = sl;
+
+  while (cur->next != NULL) {
+    cur = cur->next;
+  }
+
+  cur->next = new_node;
+  return sl;
 }
 
 // ################################ CONTROLLER ################################

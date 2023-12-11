@@ -12,13 +12,22 @@
 struct patient_node *insert_tail(struct patient_node *sl, void *el) {
   struct patient_node *new_node =
       (struct patient_node *)malloc(sizeof(struct patient_node));
+
+  struct patient_node *cur;
+
   new_node->data = el;
   new_node->next = NULL;
 
   if (sl == NULL) {
     return new_node;
   }
-  sl->next = new_node;
+  cur = sl;
+
+  while (cur->next != NULL) {
+    cur = cur->next;
+  }
+
+  cur->next = new_node;
   return sl;
 }
 
@@ -51,6 +60,7 @@ struct patient_node *remove_patient_from_list(struct patient_node *sl,
       } else {
         prev->next = cur->next;
         free(cur);
+        return sl;
       }
     }
     prev = cur;
@@ -65,7 +75,7 @@ void add_patient_to_queue(struct patient_queue *patient_queue,
   patient->id = patient_queue->current_id;
   patient_queue->current_id++;
 
-  get_triage(*patient);
+  get_triage(patient);
 
   switch (patient->triage_level) {
   case Red:
@@ -123,20 +133,20 @@ void print_queue(struct patient_queue *patient_queue) {
   printf("\n");
 }
 
-void get_triage(struct Patient patient) {
+void get_triage(struct Patient *patient) {
 
-  patient.triage_level = Blue;
+  patient->triage_level = Blue;
 
-  if (patient.vitals) {
-    patient.triage_level = get_vital_triage(*patient.vitals);
+  if (patient->vitals) {
+    patient->triage_level = get_vital_triage(*patient->vitals);
   }
 
-  if (patient.symptoms_head) {
+  if (patient->symptoms_head) {
     enum Triage_Level symptoms_triage =
-        get_symptoms_triage(patient.symptoms_head);
+        get_symptoms_triage(patient->symptoms_head);
 
-    if (patient.triage_level > symptoms_triage) {
-      patient.triage_level = symptoms_triage;
+    if (patient->triage_level > symptoms_triage) {
+      patient->triage_level = symptoms_triage;
     }
   }
 }

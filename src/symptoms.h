@@ -18,5 +18,5 @@ enum Triage_Level triage_from_symptom(struct symptom_node *sn);
 
 // ################################ CONTROLLER ################################
 
-void input_symptoms(struct symptom_node *sn);
+struct symptom_node *input_symptoms(struct symptom_node *sn);
 #endif

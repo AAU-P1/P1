@@ -51,18 +51,16 @@ struct symptom_node *add_symptom(struct symptom_node *cl, void *el,
 
 // ################################ CONTROLLER ################################
 
-void input_symptoms(struct symptom_node *sn) {
+struct symptom_node *input_symptoms(struct symptom_node *sn) {
 
-  sn = (struct symptom_node *)malloc(sizeof(struct symptom_node));
+  int symptom_id;
 
   clear_screen();
   input_int_with_range("Please choose one of the following:\n(1) or ...",
-                       &sn->symptom_id, 1, 1);
-
-  switch (sn->symptom_id) {
-  case 1:
-    sn->data = (struct Abstinence *)malloc(sizeof(struct Abstinence));
-    input_abstinence_symptom(sn->data);
-    break;
+                       &symptom_id, 1, 1);
+  if (symptom_id == 1) {
+    struct Abstinence *abstinence = input_abstinence_symptom();
+    sn = add_symptom(sn, abstinence, symptom_id);
   }
+  return sn;
 }

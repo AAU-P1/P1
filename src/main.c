@@ -12,7 +12,6 @@ struct Patient input_patient();
 void input_vitals(struct Vitals *vitals);
 void remove_patient(struct patient_queue *pq);
 void input_symptoms(struct symptom_node *sn);
-struct Abstinence *input_abstinence_symptom();
 int main(void) {
 
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};

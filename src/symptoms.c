@@ -48,7 +48,7 @@ struct symptom_node *add_symptom(struct symptom_node *cl, void *el,
   return cl;
 }
 
-// ################################## VIEW ##################################
+// ################################ CONTROLLER ################################
 
 void input_symptoms(struct symptom_node *sn) {
 
@@ -60,7 +60,10 @@ void input_symptoms(struct symptom_node *sn) {
   switch (choice) {
   case 1:
     sn->symptom_id = choice;
-    sn->data = input_abstinence_symptom();
+
+    sn->data = (struct Abstinence *)malloc(sizeof(struct Abstinence));
+
+    input_abstinence_symptom(sn->data);
     break;
   }
 }

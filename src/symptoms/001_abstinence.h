@@ -22,5 +22,5 @@ enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence);
 
 // ################################ CONTROLLER ################################
 
-struct Abstinence *input_abstinence_symptom();
+void input_abstinence_symptom(struct Abstinence *abstinence);
 #endif

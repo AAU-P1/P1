@@ -53,10 +53,7 @@ struct Abstinence *symptoms_abstinence_parse_string(char *str) {
 
 // ################################ CONTROLLER ################################
 
-struct Abstinence *input_abstinence_symptom() {
-
-  struct Abstinence *abstinence =
-      (struct Abstinence *)malloc(sizeof(struct Abstinence));
+void input_abstinence_symptom(struct Abstinence *abstinence) {
 
   char choice;
   clear_screen();
@@ -104,6 +101,4 @@ struct Abstinence *input_abstinence_symptom() {
     abstinence->restless = AC_easy_or_none;
     break;
   }
-
-  return abstinence;
 }

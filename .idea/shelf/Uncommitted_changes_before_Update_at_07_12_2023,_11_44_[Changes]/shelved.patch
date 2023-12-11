@@ -1,0 +1,1318 @@
+Index: src/main.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"patient_queue.h\"\n#include \"symptoms.h\"\n#include \"triage_level.h\"\n#include \"vitals.h\"\n#include <ncurses.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nvoid clearInputBuffer();\nstruct Patient input_patient();\nvoid input_vitals(struct Vitals *vitals);\nint main(void) {\n\n  struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL};\n\n  char choice;\n  while (true) {\n    printf(\"(T)riage new patient      (I)nput patient from file       (R)emove \"\n           \"Patient         (D)isplay Queue        (Q)uit\\n\");\n    choice = getchar();\n    clearInputBuffer();\n\n    switch (choice) {\n    case 'T':\n    case 't':\n      add_patient_to_queue(&patient_queue, input_patient());\n      print_queue(&patient_queue);\n      break;\n    case 'I':\n    case 'i':\n      break;\n    case 'R':\n    case 'r':\n      break;\n    case 'D':\n    case 'd':\n      break;\n    case 'Q':\n    case 'q':\n      printf(\"Bye!\\n\");\n      exit(1);\n      break;\n    default:\n      printf(\"Invalid input try again\");\n    }\n  }\n}\n\nvoid input_int(char *message, int *dest) {\n  while (true) {\n    printf(\"%s\\n\", message);\n    int res = scanf(\"%d\", dest);\n    clearInputBuffer();\n    if (res != 1) {\n      printf(\"Invalid input. Try again!\\n\");\n    } else {\n      return;\n    }\n  }\n}\n\nvoid input_double(char *message, double *dest) {\n  while (true) {\n    printf(\"%s\\n\", message);\n    int res = scanf(\"%lf\", dest);\n    clearInputBuffer();\n    if (res != 1) {\n      printf(\"Invalid input. Try again!\\n\");\n    } else {\n      return;\n    }\n  }\n}\n\nvoid input_char(char *choice, char *message, char *valid_chars) {\n  while (true) {\n    printf(\"%s\\n\", message);\n    char c = getchar();\n    clearInputBuffer();\n    int i = 0;\n    while (valid_chars[i] != '\\0') {\n      if (c == valid_chars[i]) {\n        *choice = c;\n        return;\n      }\n      ++i;\n    }\n    printf(\"Invalid input. Try again!\\n\");\n  }\n}\n\nvoid input_string(char *message, char *dest) {\n  while (true) {\n    printf(\"%s\\n\", message);\n    int res = scanf(\"%s\", dest);\n    if (res != 1) {\n      printf(\"Invalid input. Try again!\\n\");\n    } else {\n      return;\n    }\n  }\n}\n\nstruct Patient input_patient() {\n\n  struct Patient patient;\n\n  // Get patient Name\n  input_string(\"input patient name\", patient.name);\n\n  // Get patient Age\n  input_int(\"Input patient age\", &patient.age);\n\n  // Get patient Gender\n  char choice;\n  input_char(&choice, \"Input patient gender, (M)ale or (F)emale\", \"MmFf\");\n  switch (choice) {\n  case 'M':\n  case 'm':\n    patient.gender = Male;\n    break;\n  case 'F':\n  case 'f':\n    patient.gender = Female;\n    break;\n  }\n\n  // Get patient Vitals\n  input_char(&choice, \"Would you like to input Vital Parameters? (Y)es  (N)o\",\n             \"YyNn\");\n  switch (choice) {\n  case 'Y':\n  case 'y':\n    patient.vitals = (struct Vitals *)malloc(sizeof(struct Vitals));\n    input_vitals(patient.vitals);\n    break;\n  case 'N':\n  case 'n':\n    patient.vitals = NULL;\n    break;\n  }\n\n  return patient;\n}\n\nvoid input_vitals(struct Vitals *vitals) {\n\n  char choice;\n\n  input_char(&choice,\n             \"Is the airway: (B)locked (F)ree or (I)nspiratory Stridor?\",\n             \"BbFfIi\");\n\n  switch (choice) {\n  case 'B':\n  case 'b':\n    vitals->airway = Blocked;\n    break;\n  case 'F':\n  case 'f':\n    vitals->airway = Free;\n    break;\n  case 'I':\n  case 'i':\n    vitals->airway = Inspiratory_stridor;\n    break;\n  }\n\n  // Get patient_vitals Kol\n  input_char(&choice, \"Is the patient with kol? (Y)es  (N)o\", \"YyNn\");\n  switch (choice) {\n  case 'Y':\n  case 'y':\n    vitals->with_kol = true;\n    break;\n  case 'N':\n  case 'n':\n    vitals->with_kol = false;\n    break;\n  }\n\n  input_int(\"Input Oxygen Saturation\", &vitals->oxygen_saturation);\n\n  // Get patient_vitals Airway\n  input_char(&choice, \"Is the patient with oxygen? (Y)es  (N)o\", \"YyNn\");\n  switch (choice) {\n  case 'Y':\n  case 'y':\n    vitals->with_oxygen = true;\n    break;\n  case 'N':\n  case 'n':\n    vitals->with_oxygen = false;\n    break;\n  }\n\n  input_int(\"Input Respiration Frequency\", &vitals->respiration_frequency);\n\n  input_int(\"Input Pulse\", &vitals->pulse);\n\n  input_int(\"Input Systolic Blood Pressure\", &vitals->systolic_blood_pressure);\n\n  input_int(\"Input Glasgow Coma Scale Number\", &vitals->glasgow_coma_scale);\n\n  input_double(\"Input Temperature Celcius\", &vitals->temperature_celcius);\n}\nvoid clearInputBuffer() {\n  int c;\n  while ((c = getchar()) != '\\n' && c != EOF) {\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main.c b/src/main.c
+--- a/src/main.c	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ b/src/main.c	(date 1701938442716)
+@@ -2,7 +2,7 @@
+ #include "symptoms.h"
+ #include "triage_level.h"
+ #include "vitals.h"
+-#include <ncurses.h>
++#include "ncurses.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+Index: cmake-build-debug/.cmake/api/v1/reply/target-triage_level-Debug-41d5436450c89d83da13.json
+===================================================================
+diff --git a/cmake-build-debug/.cmake/api/v1/reply/target-triage_level-Debug-41d5436450c89d83da13.json b/cmake-build-debug/.cmake/api/v1/reply/target-triage_level-Debug-41d5436450c89d83da13.json
+deleted file mode 100644
+--- a/cmake-build-debug/.cmake/api/v1/reply/target-triage_level-Debug-41d5436450c89d83da13.json	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ /dev/null	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
+@@ -1,85 +0,0 @@
+-{
+-	"archive" : {},
+-	"artifacts" : 
+-	[
+-		{
+-			"path" : "src/libtriage_level.a"
+-		}
+-	],
+-	"backtrace" : 1,
+-	"backtraceGraph" : 
+-	{
+-		"commands" : 
+-		[
+-			"add_library"
+-		],
+-		"files" : 
+-		[
+-			"src/CMakeLists.txt"
+-		],
+-		"nodes" : 
+-		[
+-			{
+-				"file" : 0
+-			},
+-			{
+-				"command" : 0,
+-				"file" : 0,
+-				"line" : 10,
+-				"parent" : 0
+-			}
+-		]
+-	},
+-	"compileGroups" : 
+-	[
+-		{
+-			"compileCommandFragments" : 
+-			[
+-				{
+-					"fragment" : "-g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics"
+-				}
+-			],
+-			"language" : "C",
+-			"languageStandard" : 
+-			{
+-				"backtraces" : 
+-				[
+-					1
+-				],
+-				"standard" : "11"
+-			},
+-			"sourceIndexes" : 
+-			[
+-				0
+-			]
+-		}
+-	],
+-	"id" : "triage_level::@145eef247bfb46b6828c",
+-	"name" : "triage_level",
+-	"nameOnDisk" : "libtriage_level.a",
+-	"paths" : 
+-	{
+-		"build" : "src",
+-		"source" : "src"
+-	},
+-	"sourceGroups" : 
+-	[
+-		{
+-			"name" : "Source Files",
+-			"sourceIndexes" : 
+-			[
+-				0
+-			]
+-		}
+-	],
+-	"sources" : 
+-	[
+-		{
+-			"backtrace" : 1,
+-			"compileGroupIndex" : 0,
+-			"path" : "src/triage_level.c",
+-			"sourceGroupIndex" : 0
+-		}
+-	],
+-	"type" : "STATIC_LIBRARY"
+-}
+Index: cmake-build-debug/.cmake/api/v1/reply/index-2023-12-06T11-50-55-0033.json
+===================================================================
+diff --git a/cmake-build-debug/.cmake/api/v1/reply/index-2023-12-06T11-50-55-0033.json b/cmake-build-debug/.cmake/api/v1/reply/index-2023-12-06T11-50-55-0033.json
+deleted file mode 100644
+--- a/cmake-build-debug/.cmake/api/v1/reply/index-2023-12-06T11-50-55-0033.json	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ /dev/null	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
+@@ -1,108 +0,0 @@
+-{
+-	"cmake" : 
+-	{
+-		"generator" : 
+-		{
+-			"multiConfig" : false,
+-			"name" : "Ninja"
+-		},
+-		"paths" : 
+-		{
+-			"cmake" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake",
+-			"cpack" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cpack",
+-			"ctest" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/ctest",
+-			"root" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26"
+-		},
+-		"version" : 
+-		{
+-			"isDirty" : false,
+-			"major" : 3,
+-			"minor" : 26,
+-			"patch" : 4,
+-			"string" : "3.26.4",
+-			"suffix" : ""
+-		}
+-	},
+-	"objects" : 
+-	[
+-		{
+-			"jsonFile" : "codemodel-v2-361ad9bba9d79f78e200.json",
+-			"kind" : "codemodel",
+-			"version" : 
+-			{
+-				"major" : 2,
+-				"minor" : 5
+-			}
+-		},
+-		{
+-			"jsonFile" : "cache-v2-f1411b6015c0f1004e73.json",
+-			"kind" : "cache",
+-			"version" : 
+-			{
+-				"major" : 2,
+-				"minor" : 0
+-			}
+-		},
+-		{
+-			"jsonFile" : "cmakeFiles-v1-51018734deb8ed425c53.json",
+-			"kind" : "cmakeFiles",
+-			"version" : 
+-			{
+-				"major" : 1,
+-				"minor" : 0
+-			}
+-		},
+-		{
+-			"jsonFile" : "toolchains-v1-5ca06af607b896ce7535.json",
+-			"kind" : "toolchains",
+-			"version" : 
+-			{
+-				"major" : 1,
+-				"minor" : 0
+-			}
+-		}
+-	],
+-	"reply" : 
+-	{
+-		"cache-v2" : 
+-		{
+-			"jsonFile" : "cache-v2-f1411b6015c0f1004e73.json",
+-			"kind" : "cache",
+-			"version" : 
+-			{
+-				"major" : 2,
+-				"minor" : 0
+-			}
+-		},
+-		"cmakeFiles-v1" : 
+-		{
+-			"jsonFile" : "cmakeFiles-v1-51018734deb8ed425c53.json",
+-			"kind" : "cmakeFiles",
+-			"version" : 
+-			{
+-				"major" : 1,
+-				"minor" : 0
+-			}
+-		},
+-		"codemodel-v2" : 
+-		{
+-			"jsonFile" : "codemodel-v2-361ad9bba9d79f78e200.json",
+-			"kind" : "codemodel",
+-			"version" : 
+-			{
+-				"major" : 2,
+-				"minor" : 5
+-			}
+-		},
+-		"toolchains-v1" : 
+-		{
+-			"jsonFile" : "toolchains-v1-5ca06af607b896ce7535.json",
+-			"kind" : "toolchains",
+-			"version" : 
+-			{
+-				"major" : 1,
+-				"minor" : 0
+-			}
+-		}
+-	}
+-}
+Index: cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-51018734deb8ed425c53.json
+===================================================================
+diff --git a/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-51018734deb8ed425c53.json b/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-51018734deb8ed425c53.json
+deleted file mode 100644
+--- a/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-51018734deb8ed425c53.json	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ /dev/null	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
+@@ -1,639 +0,0 @@
+-{
+-	"inputs" : 
+-	[
+-		{
+-			"path" : "CMakeLists.txt"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystem.cmake.in"
+-		},
+-		{
+-			"isGenerated" : true,
+-			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeSystem.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCompilerIdDetection.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeFindBinUtils.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in"
+-		},
+-		{
+-			"isGenerated" : true,
+-			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeCCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitIncludeInfo.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitLinkInfo.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseLibraryArchitecture.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompilerABI.c"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompileFeatures.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake"
+-		},
+-		{
+-			"isCMake" : true,
+-			"isExternal" : true,
+-			"path" : "/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in"
+-		},
+-		{
+-			"isGenerated" : true,
+-			"path" : "cmake-build-debug/CMakeFiles/3.26.4/CMakeCCompiler.cmake"
+-		},
+-		{
+-			"path" : "src/CMakeLists.txt"
+-		}
+-	],
+-	"kind" : "cmakeFiles",
+-	"paths" : 
+-	{
+-		"build" : "/Users/houkjaer1/CLionProjects/P1/cmake-build-debug",
+-		"source" : "/Users/houkjaer1/CLionProjects/P1"
+-	},
+-	"version" : 
+-	{
+-		"major" : 1,
+-		"minor" : 0
+-	}
+-}
+Index: cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-361ad9bba9d79f78e200.json
+===================================================================
+diff --git a/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-361ad9bba9d79f78e200.json b/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-361ad9bba9d79f78e200.json
+deleted file mode 100644
+--- a/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-361ad9bba9d79f78e200.json	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ /dev/null	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
+@@ -1,112 +0,0 @@
+-{
+-	"configurations" : 
+-	[
+-		{
+-			"directories" : 
+-			[
+-				{
+-					"build" : ".",
+-					"childIndexes" : 
+-					[
+-						1
+-					],
+-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+-					"minimumCMakeVersion" : 
+-					{
+-						"string" : "3.5"
+-					},
+-					"projectIndex" : 0,
+-					"source" : "."
+-				},
+-				{
+-					"build" : "src",
+-					"jsonFile" : "directory-src-Debug-b6cf2213fc5053b67c22.json",
+-					"minimumCMakeVersion" : 
+-					{
+-						"string" : "3.5"
+-					},
+-					"parentIndex" : 0,
+-					"projectIndex" : 0,
+-					"source" : "src",
+-					"targetIndexes" : 
+-					[
+-						0,
+-						1,
+-						2,
+-						3,
+-						4
+-					]
+-				}
+-			],
+-			"name" : "Debug",
+-			"projects" : 
+-			[
+-				{
+-					"directoryIndexes" : 
+-					[
+-						0,
+-						1
+-					],
+-					"name" : "Project1",
+-					"targetIndexes" : 
+-					[
+-						0,
+-						1,
+-						2,
+-						3,
+-						4
+-					]
+-				}
+-			],
+-			"targets" : 
+-			[
+-				{
+-					"directoryIndex" : 1,
+-					"id" : "main::@145eef247bfb46b6828c",
+-					"jsonFile" : "target-main-Debug-5d875a883cd7f6db17d3.json",
+-					"name" : "main",
+-					"projectIndex" : 0
+-				},
+-				{
+-					"directoryIndex" : 1,
+-					"id" : "patient_queue::@145eef247bfb46b6828c",
+-					"jsonFile" : "target-patient_queue-Debug-7746b8c65d66bc3c4e54.json",
+-					"name" : "patient_queue",
+-					"projectIndex" : 0
+-				},
+-				{
+-					"directoryIndex" : 1,
+-					"id" : "symptoms::@145eef247bfb46b6828c",
+-					"jsonFile" : "target-symptoms-Debug-4c5af0c968532d7e8ac8.json",
+-					"name" : "symptoms",
+-					"projectIndex" : 0
+-				},
+-				{
+-					"directoryIndex" : 1,
+-					"id" : "triage_level::@145eef247bfb46b6828c",
+-					"jsonFile" : "target-triage_level-Debug-41d5436450c89d83da13.json",
+-					"name" : "triage_level",
+-					"projectIndex" : 0
+-				},
+-				{
+-					"directoryIndex" : 1,
+-					"id" : "vitals::@145eef247bfb46b6828c",
+-					"jsonFile" : "target-vitals-Debug-b8f6f8a2cc1420ef5777.json",
+-					"name" : "vitals",
+-					"projectIndex" : 0
+-				}
+-			]
+-		}
+-	],
+-	"kind" : "codemodel",
+-	"paths" : 
+-	{
+-		"build" : "/Users/houkjaer1/CLionProjects/P1/cmake-build-debug",
+-		"source" : "/Users/houkjaer1/CLionProjects/P1"
+-	},
+-	"version" : 
+-	{
+-		"major" : 2,
+-		"minor" : 5
+-	}
+-}
+Index: cmake-build-debug/.cmake/api/v1/reply/target-main-Debug-5d875a883cd7f6db17d3.json
+===================================================================
+diff --git a/cmake-build-debug/.cmake/api/v1/reply/target-main-Debug-5d875a883cd7f6db17d3.json b/cmake-build-debug/.cmake/api/v1/reply/target-main-Debug-5d875a883cd7f6db17d3.json
+deleted file mode 100644
+--- a/cmake-build-debug/.cmake/api/v1/reply/target-main-Debug-5d875a883cd7f6db17d3.json	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ /dev/null	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
+@@ -1,152 +0,0 @@
+-{
+-	"artifacts" : 
+-	[
+-		{
+-			"path" : "src/main"
+-		}
+-	],
+-	"backtrace" : 1,
+-	"backtraceGraph" : 
+-	{
+-		"commands" : 
+-		[
+-			"add_executable",
+-			"target_link_libraries"
+-		],
+-		"files" : 
+-		[
+-			"src/CMakeLists.txt"
+-		],
+-		"nodes" : 
+-		[
+-			{
+-				"file" : 0
+-			},
+-			{
+-				"command" : 0,
+-				"file" : 0,
+-				"line" : 12,
+-				"parent" : 0
+-			},
+-			{
+-				"command" : 1,
+-				"file" : 0,
+-				"line" : 14,
+-				"parent" : 0
+-			}
+-		]
+-	},
+-	"compileGroups" : 
+-	[
+-		{
+-			"compileCommandFragments" : 
+-			[
+-				{
+-					"fragment" : "-g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics"
+-				}
+-			],
+-			"includes" : 
+-			[
+-				{
+-					"backtrace" : 2,
+-					"path" : "/Users/houkjaer1/CLionProjects/P1/src/."
+-				}
+-			],
+-			"language" : "C",
+-			"languageStandard" : 
+-			{
+-				"backtraces" : 
+-				[
+-					1
+-				],
+-				"standard" : "11"
+-			},
+-			"sourceIndexes" : 
+-			[
+-				0
+-			]
+-		}
+-	],
+-	"dependencies" : 
+-	[
+-		{
+-			"backtrace" : 2,
+-			"id" : "patient_queue::@145eef247bfb46b6828c"
+-		},
+-		{
+-			"backtrace" : 2,
+-			"id" : "symptoms::@145eef247bfb46b6828c"
+-		},
+-		{
+-			"backtrace" : 2,
+-			"id" : "vitals::@145eef247bfb46b6828c"
+-		},
+-		{
+-			"backtrace" : 2,
+-			"id" : "triage_level::@145eef247bfb46b6828c"
+-		}
+-	],
+-	"id" : "main::@145eef247bfb46b6828c",
+-	"link" : 
+-	{
+-		"commandFragments" : 
+-		[
+-			{
+-				"fragment" : "-g",
+-				"role" : "flags"
+-			},
+-			{
+-				"fragment" : "",
+-				"role" : "flags"
+-			},
+-			{
+-				"backtrace" : 2,
+-				"fragment" : "src/libpatient_queue.a",
+-				"role" : "libraries"
+-			},
+-			{
+-				"backtrace" : 2,
+-				"fragment" : "src/libsymptoms.a",
+-				"role" : "libraries"
+-			},
+-			{
+-				"backtrace" : 2,
+-				"fragment" : "src/libvitals.a",
+-				"role" : "libraries"
+-			},
+-			{
+-				"backtrace" : 2,
+-				"fragment" : "src/libtriage_level.a",
+-				"role" : "libraries"
+-			}
+-		],
+-		"language" : "C"
+-	},
+-	"name" : "main",
+-	"nameOnDisk" : "main",
+-	"paths" : 
+-	{
+-		"build" : "src",
+-		"source" : "src"
+-	},
+-	"sourceGroups" : 
+-	[
+-		{
+-			"name" : "Source Files",
+-			"sourceIndexes" : 
+-			[
+-				0
+-			]
+-		}
+-	],
+-	"sources" : 
+-	[
+-		{
+-			"backtrace" : 1,
+-			"compileGroupIndex" : 0,
+-			"path" : "src/main.c",
+-			"sourceGroupIndex" : 0
+-		}
+-	],
+-	"type" : "EXECUTABLE"
+-}
+Index: cmake-build-debug/build.ninja
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># CMAKE generated file: DO NOT EDIT!\n# Generated by \"Ninja\" Generator, CMake Version 3.26\n\n# This file contains all the build statements describing the\n# compilation DAG.\n\n# =============================================================================\n# Write statements declared in CMakeLists.txt:\n# \n# Which is the root file.\n# =============================================================================\n\n# =============================================================================\n# Project: Project1\n# Configurations: Debug\n# =============================================================================\n\n#############################################\n# Minimal version of Ninja required by this file\n\nninja_required_version = 1.5\n\n\n#############################################\n# Set configuration variable for custom commands.\n\nCONFIGURATION = Debug\n# =============================================================================\n# Include auxiliary files.\n\n\n#############################################\n# Include rules file.\n\ninclude CMakeFiles/rules.ninja\n\n# =============================================================================\n\n#############################################\n# Logical path to working directory; prefix for absolute paths.\n\ncmake_ninja_workdir = /Users/houkjaer1/CLionProjects/P1/cmake-build-debug/\n\n#############################################\n# Utility command for edit_cache\n\nbuild CMakeFiles/edit_cache.util: CUSTOM_COMMAND\n  COMMAND = cd /Users/houkjaer1/CLionProjects/P1/cmake-build-debug && /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\\ interactive\\ CMake\\ dialog\\ available.\n  DESC = No interactive CMake dialog available...\n  restat = 1\n\nbuild edit_cache: phony CMakeFiles/edit_cache.util\n\n\n#############################################\n# Utility command for rebuild_cache\n\nbuild CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND\n  COMMAND = cd /Users/houkjaer1/CLionProjects/P1/cmake-build-debug && /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/houkjaer1/CLionProjects/P1 -B/Users/houkjaer1/CLionProjects/P1/cmake-build-debug\n  DESC = Running CMake to regenerate build system...\n  pool = console\n  restat = 1\n\nbuild rebuild_cache: phony CMakeFiles/rebuild_cache.util\n\n# =============================================================================\n# Write statements declared in CMakeLists.txt:\n# /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt\n# =============================================================================\n\n# =============================================================================\n# Object build statements for STATIC_LIBRARY target patient_queue\n\n\n#############################################\n# Order-only phony target for patient_queue\n\nbuild cmake_object_order_depends_target_patient_queue: phony || src/CMakeFiles/patient_queue.dir\n\nbuild src/CMakeFiles/patient_queue.dir/patient_queue.c.o: C_COMPILER__patient_queue_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/patient_queue.c || cmake_object_order_depends_target_patient_queue\n  DEP_FILE = src/CMakeFiles/patient_queue.dir/patient_queue.c.o.d\n  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics\n  INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.\n  OBJECT_DIR = src/CMakeFiles/patient_queue.dir\n  OBJECT_FILE_DIR = src/CMakeFiles/patient_queue.dir\n  TARGET_COMPILE_PDB = src/CMakeFiles/patient_queue.dir/patient_queue.pdb\n  TARGET_PDB = src/libpatient_queue.pdb\n\n\n# =============================================================================\n# Link build statements for STATIC_LIBRARY target patient_queue\n\n\n#############################################\n# Link the static library src/libpatient_queue.a\n\nbuild src/libpatient_queue.a: C_STATIC_LIBRARY_LINKER__patient_queue_Debug src/CMakeFiles/patient_queue.dir/patient_queue.c.o\n  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk\n  LANGUAGE_COMPILE_FLAGS = -g\n  OBJECT_DIR = src/CMakeFiles/patient_queue.dir\n  POST_BUILD = :\n  PRE_LINK = :\n  TARGET_COMPILE_PDB = src/CMakeFiles/patient_queue.dir/patient_queue.pdb\n  TARGET_FILE = src/libpatient_queue.a\n  TARGET_PDB = src/libpatient_queue.pdb\n\n# =============================================================================\n# Object build statements for STATIC_LIBRARY target symptoms\n\n\n#############################################\n# Order-only phony target for symptoms\n\nbuild cmake_object_order_depends_target_symptoms: phony || src/CMakeFiles/symptoms.dir\n\nbuild src/CMakeFiles/symptoms.dir/symptoms.c.o: C_COMPILER__symptoms_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/symptoms.c || cmake_object_order_depends_target_symptoms\n  DEP_FILE = src/CMakeFiles/symptoms.dir/symptoms.c.o.d\n  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics\n  INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.\n  OBJECT_DIR = src/CMakeFiles/symptoms.dir\n  OBJECT_FILE_DIR = src/CMakeFiles/symptoms.dir\n  TARGET_COMPILE_PDB = src/CMakeFiles/symptoms.dir/symptoms.pdb\n  TARGET_PDB = src/libsymptoms.pdb\n\n\n# =============================================================================\n# Link build statements for STATIC_LIBRARY target symptoms\n\n\n#############################################\n# Link the static library src/libsymptoms.a\n\nbuild src/libsymptoms.a: C_STATIC_LIBRARY_LINKER__symptoms_Debug src/CMakeFiles/symptoms.dir/symptoms.c.o\n  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk\n  LANGUAGE_COMPILE_FLAGS = -g\n  OBJECT_DIR = src/CMakeFiles/symptoms.dir\n  POST_BUILD = :\n  PRE_LINK = :\n  TARGET_COMPILE_PDB = src/CMakeFiles/symptoms.dir/symptoms.pdb\n  TARGET_FILE = src/libsymptoms.a\n  TARGET_PDB = src/libsymptoms.pdb\n\n# =============================================================================\n# Object build statements for STATIC_LIBRARY target vitals\n\n\n#############################################\n# Order-only phony target for vitals\n\nbuild cmake_object_order_depends_target_vitals: phony || src/CMakeFiles/vitals.dir\n\nbuild src/CMakeFiles/vitals.dir/vitals.c.o: C_COMPILER__vitals_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/vitals.c || cmake_object_order_depends_target_vitals\n  DEP_FILE = src/CMakeFiles/vitals.dir/vitals.c.o.d\n  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics\n  INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.\n  OBJECT_DIR = src/CMakeFiles/vitals.dir\n  OBJECT_FILE_DIR = src/CMakeFiles/vitals.dir\n  TARGET_COMPILE_PDB = src/CMakeFiles/vitals.dir/vitals.pdb\n  TARGET_PDB = src/libvitals.pdb\n\n\n# =============================================================================\n# Link build statements for STATIC_LIBRARY target vitals\n\n\n#############################################\n# Link the static library src/libvitals.a\n\nbuild src/libvitals.a: C_STATIC_LIBRARY_LINKER__vitals_Debug src/CMakeFiles/vitals.dir/vitals.c.o\n  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk\n  LANGUAGE_COMPILE_FLAGS = -g\n  OBJECT_DIR = src/CMakeFiles/vitals.dir\n  POST_BUILD = :\n  PRE_LINK = :\n  TARGET_COMPILE_PDB = src/CMakeFiles/vitals.dir/vitals.pdb\n  TARGET_FILE = src/libvitals.a\n  TARGET_PDB = src/libvitals.pdb\n\n# =============================================================================\n# Object build statements for STATIC_LIBRARY target triage_level\n\n\n#############################################\n# Order-only phony target for triage_level\n\nbuild cmake_object_order_depends_target_triage_level: phony || src/CMakeFiles/triage_level.dir\n\nbuild src/CMakeFiles/triage_level.dir/triage_level.c.o: C_COMPILER__triage_level_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/triage_level.c || cmake_object_order_depends_target_triage_level\n  DEP_FILE = src/CMakeFiles/triage_level.dir/triage_level.c.o.d\n  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics\n  OBJECT_DIR = src/CMakeFiles/triage_level.dir\n  OBJECT_FILE_DIR = src/CMakeFiles/triage_level.dir\n  TARGET_COMPILE_PDB = src/CMakeFiles/triage_level.dir/triage_level.pdb\n  TARGET_PDB = src/libtriage_level.pdb\n\n\n# =============================================================================\n# Link build statements for STATIC_LIBRARY target triage_level\n\n\n#############################################\n# Link the static library src/libtriage_level.a\n\nbuild src/libtriage_level.a: C_STATIC_LIBRARY_LINKER__triage_level_Debug src/CMakeFiles/triage_level.dir/triage_level.c.o\n  ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk\n  LANGUAGE_COMPILE_FLAGS = -g\n  OBJECT_DIR = src/CMakeFiles/triage_level.dir\n  POST_BUILD = :\n  PRE_LINK = :\n  TARGET_COMPILE_PDB = src/CMakeFiles/triage_level.dir/triage_level.pdb\n  TARGET_FILE = src/libtriage_level.a\n  TARGET_PDB = src/libtriage_level.pdb\n\n# =============================================================================\n# Object build statements for EXECUTABLE target main\n\n\n#############################################\n# Order-only phony target for main\n\nbuild cmake_object_order_depends_target_main: phony || cmake_object_order_depends_target_patient_queue cmake_object_order_depends_target_symptoms cmake_object_order_depends_target_triage_level cmake_object_order_depends_target_vitals\n\nbuild src/CMakeFiles/main.dir/main.c.o: C_COMPILER__main_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/main.c || cmake_object_order_depends_target_main\n  DEP_FILE = src/CMakeFiles/main.dir/main.c.o.d\n  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics\n  INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.\n  OBJECT_DIR = src/CMakeFiles/main.dir\n  OBJECT_FILE_DIR = src/CMakeFiles/main.dir\n  TARGET_COMPILE_PDB = src/CMakeFiles/main.dir/\n  TARGET_PDB = src/main.pdb\n\n\n# =============================================================================\n# Link build statements for EXECUTABLE target main\n\n\n#############################################\n# Link the executable src/main\n\nbuild src/main: C_EXECUTABLE_LINKER__main_Debug src/CMakeFiles/main.dir/main.c.o | src/libpatient_queue.a src/libsymptoms.a src/libvitals.a src/libtriage_level.a || src/libpatient_queue.a src/libsymptoms.a src/libtriage_level.a src/libvitals.a\n  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk\n  LINK_LIBRARIES = src/libpatient_queue.a  src/libsymptoms.a  src/libvitals.a  src/libtriage_level.a\n  OBJECT_DIR = src/CMakeFiles/main.dir\n  POST_BUILD = :\n  PRE_LINK = :\n  TARGET_COMPILE_PDB = src/CMakeFiles/main.dir/\n  TARGET_FILE = src/main\n  TARGET_PDB = src/main.pdb\n\n\n#############################################\n# Utility command for edit_cache\n\nbuild src/CMakeFiles/edit_cache.util: CUSTOM_COMMAND\n  COMMAND = cd /Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src && /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\\ interactive\\ CMake\\ dialog\\ available.\n  DESC = No interactive CMake dialog available...\n  restat = 1\n\nbuild src/edit_cache: phony src/CMakeFiles/edit_cache.util\n\n\n#############################################\n# Utility command for rebuild_cache\n\nbuild src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND\n  COMMAND = cd /Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src && /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/houkjaer1/CLionProjects/P1 -B/Users/houkjaer1/CLionProjects/P1/cmake-build-debug\n  DESC = Running CMake to regenerate build system...\n  pool = console\n  restat = 1\n\nbuild src/rebuild_cache: phony src/CMakeFiles/rebuild_cache.util\n\n# =============================================================================\n# Target aliases.\n\nbuild libpatient_queue.a: phony src/libpatient_queue.a\n\nbuild libsymptoms.a: phony src/libsymptoms.a\n\nbuild libtriage_level.a: phony src/libtriage_level.a\n\nbuild libvitals.a: phony src/libvitals.a\n\nbuild main: phony src/main\n\nbuild patient_queue: phony src/libpatient_queue.a\n\nbuild symptoms: phony src/libsymptoms.a\n\nbuild triage_level: phony src/libtriage_level.a\n\nbuild vitals: phony src/libvitals.a\n\n# =============================================================================\n# Folder targets.\n\n# =============================================================================\n\n#############################################\n# Folder: /Users/houkjaer1/CLionProjects/P1/cmake-build-debug\n\nbuild all: phony src/all\n\n# =============================================================================\n\n#############################################\n# Folder: /Users/houkjaer1/CLionProjects/P1/cmake-build-debug/src\n\nbuild src/all: phony src/libpatient_queue.a src/libsymptoms.a src/libvitals.a src/libtriage_level.a src/main\n\n# =============================================================================\n# Built-in targets\n\n\n#############################################\n# Re-run CMake if any of its inputs changed.\n\nbuild build.ninja: RERUN_CMAKE | /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompilerABI.c /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCompilerIdDetection.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompileFeatures.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeFindBinUtils.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitLinkInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseLibraryArchitecture.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystem.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake\n  pool = console\n\n\n#############################################\n# A missing CMake input file is not an error.\n\nbuild /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompilerABI.c /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCompilerIdDetection.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompileFeatures.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeFindBinUtils.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitLinkInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseLibraryArchitecture.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystem.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake: phony\n\n\n#############################################\n# Clean all the built files.\n\nbuild clean: CLEAN\n\n\n#############################################\n# Print all primary targets available.\n\nbuild help: HELP\n\n\n#############################################\n# Make the all target the default.\n\ndefault all\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/build.ninja b/cmake-build-debug/build.ninja
+--- a/cmake-build-debug/build.ninja	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ b/cmake-build-debug/build.ninja	(date 1701938442899)
+@@ -83,8 +83,6 @@
+   INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.
+   OBJECT_DIR = src/CMakeFiles/patient_queue.dir
+   OBJECT_FILE_DIR = src/CMakeFiles/patient_queue.dir
+-  TARGET_COMPILE_PDB = src/CMakeFiles/patient_queue.dir/patient_queue.pdb
+-  TARGET_PDB = src/libpatient_queue.pdb
+ 
+ 
+ # =============================================================================
+@@ -100,9 +98,8 @@
+   OBJECT_DIR = src/CMakeFiles/patient_queue.dir
+   POST_BUILD = :
+   PRE_LINK = :
+-  TARGET_COMPILE_PDB = src/CMakeFiles/patient_queue.dir/patient_queue.pdb
+   TARGET_FILE = src/libpatient_queue.a
+-  TARGET_PDB = src/libpatient_queue.pdb
++  TARGET_PDB = patient_queue.a.dbg
+ 
+ # =============================================================================
+ # Object build statements for STATIC_LIBRARY target symptoms
+@@ -119,8 +116,6 @@
+   INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.
+   OBJECT_DIR = src/CMakeFiles/symptoms.dir
+   OBJECT_FILE_DIR = src/CMakeFiles/symptoms.dir
+-  TARGET_COMPILE_PDB = src/CMakeFiles/symptoms.dir/symptoms.pdb
+-  TARGET_PDB = src/libsymptoms.pdb
+ 
+ 
+ # =============================================================================
+@@ -136,9 +131,8 @@
+   OBJECT_DIR = src/CMakeFiles/symptoms.dir
+   POST_BUILD = :
+   PRE_LINK = :
+-  TARGET_COMPILE_PDB = src/CMakeFiles/symptoms.dir/symptoms.pdb
+   TARGET_FILE = src/libsymptoms.a
+-  TARGET_PDB = src/libsymptoms.pdb
++  TARGET_PDB = symptoms.a.dbg
+ 
+ # =============================================================================
+ # Object build statements for STATIC_LIBRARY target vitals
+@@ -155,8 +149,6 @@
+   INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.
+   OBJECT_DIR = src/CMakeFiles/vitals.dir
+   OBJECT_FILE_DIR = src/CMakeFiles/vitals.dir
+-  TARGET_COMPILE_PDB = src/CMakeFiles/vitals.dir/vitals.pdb
+-  TARGET_PDB = src/libvitals.pdb
+ 
+ 
+ # =============================================================================
+@@ -172,9 +164,8 @@
+   OBJECT_DIR = src/CMakeFiles/vitals.dir
+   POST_BUILD = :
+   PRE_LINK = :
+-  TARGET_COMPILE_PDB = src/CMakeFiles/vitals.dir/vitals.pdb
+   TARGET_FILE = src/libvitals.a
+-  TARGET_PDB = src/libvitals.pdb
++  TARGET_PDB = vitals.a.dbg
+ 
+ # =============================================================================
+ # Object build statements for STATIC_LIBRARY target triage_level
+@@ -188,10 +179,9 @@
+ build src/CMakeFiles/triage_level.dir/triage_level.c.o: C_COMPILER__triage_level_unscanned_Debug /Users/houkjaer1/CLionProjects/P1/src/triage_level.c || cmake_object_order_depends_target_triage_level
+   DEP_FILE = src/CMakeFiles/triage_level.dir/triage_level.c.o.d
+   FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
++  INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.
+   OBJECT_DIR = src/CMakeFiles/triage_level.dir
+   OBJECT_FILE_DIR = src/CMakeFiles/triage_level.dir
+-  TARGET_COMPILE_PDB = src/CMakeFiles/triage_level.dir/triage_level.pdb
+-  TARGET_PDB = src/libtriage_level.pdb
+ 
+ 
+ # =============================================================================
+@@ -207,9 +197,8 @@
+   OBJECT_DIR = src/CMakeFiles/triage_level.dir
+   POST_BUILD = :
+   PRE_LINK = :
+-  TARGET_COMPILE_PDB = src/CMakeFiles/triage_level.dir/triage_level.pdb
+   TARGET_FILE = src/libtriage_level.a
+-  TARGET_PDB = src/libtriage_level.pdb
++  TARGET_PDB = triage_level.a.dbg
+ 
+ # =============================================================================
+ # Object build statements for EXECUTABLE target main
+@@ -226,8 +215,6 @@
+   INCLUDES = -I/Users/houkjaer1/CLionProjects/P1/src/.
+   OBJECT_DIR = src/CMakeFiles/main.dir
+   OBJECT_FILE_DIR = src/CMakeFiles/main.dir
+-  TARGET_COMPILE_PDB = src/CMakeFiles/main.dir/
+-  TARGET_PDB = src/main.pdb
+ 
+ 
+ # =============================================================================
+@@ -243,9 +230,8 @@
+   OBJECT_DIR = src/CMakeFiles/main.dir
+   POST_BUILD = :
+   PRE_LINK = :
+-  TARGET_COMPILE_PDB = src/CMakeFiles/main.dir/
+   TARGET_FILE = src/main
+-  TARGET_PDB = src/main.pdb
++  TARGET_PDB = main.dbg
+ 
+ 
+ #############################################
+@@ -315,14 +301,14 @@
+ #############################################
+ # Re-run CMake if any of its inputs changed.
+ 
+-build build.ninja: RERUN_CMAKE | /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompilerABI.c /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCompilerIdDetection.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompileFeatures.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeFindBinUtils.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitLinkInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseLibraryArchitecture.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystem.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake
++build build.ninja: RERUN_CMAKE | /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake
+   pool = console
+ 
+ 
+ #############################################
+ # A missing CMake input file is not an error.
+ 
+-build /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompiler.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCCompilerABI.c /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCompilerIdDetection.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompileFeatures.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeFindBinUtils.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseImplicitLinkInfo.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeParseLibraryArchitecture.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystem.cmake.in /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeTestCompilerCommon.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TI-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Tasking-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Internal/FeatureTesting.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake: phony
++build /Users/houkjaer1/CLionProjects/P1/CMakeLists.txt /Users/houkjaer1/CLionProjects/P1/src/CMakeLists.txt /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Compiler/GNU.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-AppleClang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang-C.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Apple-Clang.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin-Initialize.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/Darwin.cmake /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/share/cmake-3.26/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake: phony
+ 
+ 
+ #############################################
+Index: cmake-build-debug/Testing/Temporary/LastTest.log
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Start testing: Dec 06 12:50 CET\n----------------------------------------------------------\nEnd testing: Dec 06 12:50 CET\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/Testing/Temporary/LastTest.log b/cmake-build-debug/Testing/Temporary/LastTest.log
+--- a/cmake-build-debug/Testing/Temporary/LastTest.log	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ b/cmake-build-debug/Testing/Temporary/LastTest.log	(date 1701938443203)
+@@ -1,3 +1,3 @@
+-Start testing: Dec 06 12:50 CET
++Start testing: Dec 07 09:40 CET
+ ----------------------------------------------------------
+-End testing: Dec 06 12:50 CET
++End testing: Dec 07 09:40 CET
+Index: cmake-build-debug/CMakeFiles/clion-Debug-log.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Users/houkjaer1/Desktop/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/houkjaer1/CLionProjects/P1 -B /Users/houkjaer1/CLionProjects/P1/cmake-build-debug\n-- The C compiler identification is AppleClang 14.0.3.14030022\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /Users/houkjaer1/CLionProjects/P1/cmake-build-debug\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/cmake-build-debug/CMakeFiles/clion-Debug-log.txt b/cmake-build-debug/CMakeFiles/clion-Debug-log.txt
+--- a/cmake-build-debug/CMakeFiles/clion-Debug-log.txt	(revision 9eefe61d23797ab2e86622a75db8a855e3f8b501)
++++ b/cmake-build-debug/CMakeFiles/clion-Debug-log.txt	(date 1701938443110)
+@@ -1,10 +1,4 @@
+ /Users/houkjaer1/Desktop/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Users/houkjaer1/Desktop/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/houkjaer1/CLionProjects/P1 -B /Users/houkjaer1/CLionProjects/P1/cmake-build-debug
+--- The C compiler identification is AppleClang 14.0.3.14030022
+--- Detecting C compiler ABI info
+--- Detecting C compiler ABI info - done
+--- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+--- Detecting C compile features
+--- Detecting C compile features - done
+--- Configuring done (0.2s)
++-- Configuring done (0.0s)
+ -- Generating done (0.0s)
+ -- Build files have been written to: /Users/houkjaer1/CLionProjects/P1/cmake-build-debug

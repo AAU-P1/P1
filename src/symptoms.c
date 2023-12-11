@@ -30,7 +30,10 @@ enum Triage_Level get_symptoms_triage(struct symptom_node *sn) {
 enum Triage_Level triage_from_symptom(struct symptom_node *sn) {
   if (sn->symptom_id == 1) {
     struct Abstinence *abstinence = (struct Abstinence *)sn->data;
-    return (get_symptoms_abstinence_triage(*abstinence));
+    return get_symptoms_abstinence_triage(*abstinence);
+  } else if (sn->symptom_id == 2) {
+    struct Allergic *allergic = (struct Allergic *)sn->data;
+    return get_symptoms_allergic(*allergic);
   }
   return Blue;
 }

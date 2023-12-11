@@ -9,17 +9,17 @@
 
 // ################################## MODEL ##################################
 
-struct patient_node *insert_tail(struct patient_node *cl, void *el) {
+struct patient_node *insert_tail(struct patient_node *sl, void *el) {
   struct patient_node *new_node =
       (struct patient_node *)malloc(sizeof(struct patient_node));
   new_node->data = el;
   new_node->next = NULL;
 
-  if (cl == NULL) {
+  if (sl == NULL) {
     return new_node;
   }
-  cl->next = new_node;
-  return cl;
+  sl->next = new_node;
+  return sl;
 }
 
 void remove_patient_from_queue(struct patient_queue *pq, int p_id) {
@@ -108,13 +108,13 @@ void print_patient(struct Patient *patient) {
   printf("name:%s age:%d id:%d\n", patient->name, patient->age, patient->id);
 }
 
-void print_circular_patient_list(struct patient_node *cl) {
+void print_circular_patient_list(struct patient_node *sl) {
   struct patient_node *cur;
 
-  if (cl == NULL) {
+  if (sl == NULL) {
     return;
   }
-  cur = cl;
+  cur = sl;
 
   do {
     print_patient(cur->data);

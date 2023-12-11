@@ -9,7 +9,7 @@
  * return the triage level from an Allergic struct
  * @param allergic: Allergic struct
  */
-enum Triage_Level get_symptoms_allergic_symptoms(struct Allergic allergic) {
+enum Triage_Level get_symptoms_allergic(struct Allergic allergic) {
   enum Triage_Level triage_level = Green;
 
   bool red = allergic.swelling == AS_yes_stridor ||

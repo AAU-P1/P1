@@ -17,7 +17,7 @@ struct Allergic {
   enum Allergic_urticaria urticaria;
 };
 
-enum Triage_Level get_symptoms_allergic_triage(struct Allergic allergic);
+enum Triage_Level get_symptoms_allergic(struct Allergic allergic);
 
 // ################################ CONTROLLER ################################
 

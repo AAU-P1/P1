@@ -53,7 +53,7 @@ struct symptom_node *add_symptom(struct symptom_node *cl, void *el,
 
 void input_symptoms(struct symptom_node *sn) {
 
-  int choice;
+  sn = (struct symptom_node *)malloc(sizeof(struct symptom_node));
 
   clear_screen();
   input_int_with_range("Please choose one of the following:\n(1) or ...",
@@ -63,15 +63,8 @@ void input_symptoms(struct symptom_node *sn) {
   case 1:
     sn->symptom_id = choice;
 
+  if (sn->symptom_id == 1) {
     sn->data = (struct Abstinence *)malloc(sizeof(struct Abstinence));
-
-    if (sn->data == NULL) {
-      // Handle memory allocation failure
-      printf("Memory allocation failed\n");
-      exit(EXIT_FAILURE); // or take appropriate action
-    }
-
     input_abstinence_symptom(sn->data);
-    break;
   }
 }

@@ -156,6 +156,8 @@ void get_triage(struct Patient *patient) {
 struct Patient *input_patient() {
 
   struct Patient *patient = (struct Patient *)malloc(sizeof(struct Patient));
+  patient->vitals = NULL;
+  patient->symptoms_head = NULL;
 
   // Check if memory allocation is successful
   if (patient == NULL) {
@@ -196,24 +198,22 @@ struct Patient *input_patient() {
     patient->vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
     input_vitals(patient->vitals);
     break;
-  case 'N':
-  case 'n':
-    patient->vitals = NULL;
-    break;
   }
 
-  // Get patient Symptoms
-  clear_screen();
-  input_char(&choice, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
-  switch (choice) {
-  case 'Y':
-  case 'y':
-    patient->symptoms_head = input_symptoms(patient->symptoms_head);
-    break;
-  case 'N':
-  case 'n':
-    patient->symptoms_head = NULL;
-    break;
+  get_triage(patient);
+
+  if (patient->triage_level != Red) {
+
+    // Get patient Symptoms
+    clear_screen();
+    input_char(&choice, "Would you like to input Symptoms? (Y)es  (N)o",
+               "YyNn");
+    switch (choice) {
+    case 'Y':
+    case 'y':
+      patient->symptoms_head = input_symptoms(patient->symptoms_head);
+      break;
+    }
   }
 
   return patient;

@@ -43,7 +43,7 @@ int main(void) {
       exit(1);
       break;
     default:
-      printf("Invalid input try again");
+      printf("Invalid input try again\n");
     }
   }
 }

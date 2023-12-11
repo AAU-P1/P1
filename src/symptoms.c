@@ -57,14 +57,12 @@ void input_symptoms(struct symptom_node *sn) {
 
   clear_screen();
   input_int_with_range("Please choose one of the following:\n(1) or ...",
-                       &choice, 1, 1);
+                       &sn->symptom_id, 1, 1);
 
-  switch (choice) {
+  switch (sn->symptom_id) {
   case 1:
-    sn->symptom_id = choice;
-
-  if (sn->symptom_id == 1) {
     sn->data = (struct Abstinence *)malloc(sizeof(struct Abstinence));
     input_abstinence_symptom(sn->data);
+    break;
   }
 }

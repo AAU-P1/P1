@@ -1,0 +1,27 @@
+#ifndef SYM_MEN_GENITAL_ORGANS
+#define SYM_MEN_GENITAL_ORGANS
+#include "../triage_level.h"
+#include <stdbool.h>
+
+enum Men_genital_organs_pain_kids_older_than_2mth_and_younger_than_5yrs { MGOPKOTAYT_FLACC_8_to_10, MGOPKOTAYT_FLACC_4_to_7, MGOPKOTAYT_FLACC_0_to_3 };
+enum Men_genital_organs_pain_kids_younger_than_2mth { MGOPKYT_NIPS_4_to_6, MGOAPKYT_NIPS_1_to_3, MGOAPKYT_NIPS_0 };
+enum Men_genital_organs_pain_adult_or_kids_5yr_or_older { MGOPAOKOO_NRS_VAS_4_to_10_and_one_or_more_of_yellow_VP_painful_movementpatterns_affected_regular_condition, MGOPAOKOO_NRS_VAS_4_to_10_and_green_VP_free_and_natural_movementpatterns_non_affected_regular_condition, MGOPAOKOO_NRS_VAS_0_to_3_and_green_VP_free_and_natural_movementpatterns_non_affected_regular_condition };
+enum Men_genital_organs_morphine_within_120min_before_arrival { MGOMWBA_yellow_pain_evaluation, MGOMWBA_green_pain_evaluation };
+
+
+struct Men_genital_organs {
+    bool suspected_torsio_testis;
+    bool suspected_priapimus;
+    bool suspected_scrotal_hematoma;
+    enum Men_genital_organs_pain_kids_older_than_2mth_and_younger_than_5yrs pain_kids_older_than_2mth_and_younger_than_5yrs;
+    enum Men_genital_organs_pain_kids_younger_than_2mth pain_kids_younger_than_2mth;
+    bool Men_genital_organs_newly_arisen_confusion;
+    bool Men_genital_organs_suspected_infection;
+    bool Men_genital_organs_risk_patient;
+    enum Men_genital_organs_pain_adult_or_kids_5yr_or_older pain_adult_or_kids_5yr_or_older;
+    enum Men_genital_organs_morphine_within_120min_before_arrival morphine_within_120min_before_arrival;
+};
+
+enum Triage_Level get_symptoms_men_genital_organs_triage(struct Men_genital_organs men_genital_organs);
+
+#endif

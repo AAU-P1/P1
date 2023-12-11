@@ -16,7 +16,7 @@ struct Patient {
   struct symptom_node *symptoms_head;
 };
 
-void get_triage(struct Patient patient);
+void get_triage(struct Patient *patient);
 
 struct patient_queue {
   struct patient_node *red_head;

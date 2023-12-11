@@ -7,11 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void clearInputBuffer();
-struct Patient input_patient();
-void input_vitals(struct Vitals *vitals);
-void remove_patient(struct patient_queue *pq);
-void input_symptoms(struct symptom_node *sn);
 int main(void) {
 
   struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};

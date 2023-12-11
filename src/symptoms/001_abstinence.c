@@ -1,5 +1,6 @@
 #include "001_abstinence.h"
 #include "../controller.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 // ################################## MODEL ##################################

@@ -5,6 +5,10 @@
 
 // ################################## MODEL ##################################
 
+/*
+ * return the triage level from an Abstinence struct
+ * @param allergic: Abstinence struct
+ */
 enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence) {
   enum Triage_Level triage_level = Green;
 
@@ -54,6 +58,9 @@ struct Abstinence *symptoms_abstinence_parse_string(char *str) {
 
 // ################################ CONTROLLER ################################
 
+/*
+ * returns abstinence struct from user input
+ */
 struct Abstinence *input_abstinence_symptom() {
 
   struct Abstinence *abstinence =

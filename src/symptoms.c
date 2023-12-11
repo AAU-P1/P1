@@ -1,5 +1,6 @@
 #include "symptoms.h"
 #include "controller.h"
+#include "symptoms/002_allergic_symptoms.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -66,11 +67,15 @@ struct symptom_node *input_symptoms(struct symptom_node *sn) {
   int symptom_id;
 
   clear_screen();
-  input_int_with_range("Please choose one of the following:\n(1) or ...",
-                       &symptom_id, 1, 1);
+  input_int_with_range(
+      "Please choose one of the following:\n(1) Abstinence or (2) Allergic)",
+      &symptom_id, 1, 2);
   if (symptom_id == 1) {
     struct Abstinence *abstinence = input_abstinence_symptom();
     sn = add_symptom(sn, abstinence, symptom_id);
+  } else if (symptom_id == 2) {
+    struct Allergic *allergic = input_allergic_symptom();
+    sn = add_symptom(sn, allergic, symptom_id);
   }
   return sn;
 }

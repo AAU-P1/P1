@@ -1,5 +1,6 @@
 #include "symptoms.h"
 #include "controller.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 // ################################## MODEL ##################################
@@ -62,6 +63,12 @@ void input_symptoms(struct symptom_node *sn) {
     sn->symptom_id = choice;
 
     sn->data = (struct Abstinence *)malloc(sizeof(struct Abstinence));
+
+    if (sn->data == NULL) {
+      // Handle memory allocation failure
+      printf("Memory allocation failed\n");
+      exit(EXIT_FAILURE); // or take appropriate action
+    }
 
     input_abstinence_symptom(sn->data);
     break;

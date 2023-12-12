@@ -70,12 +70,9 @@ struct patient_node *remove_patient_from_list(struct patient_node *sl,
 }
 
 void add_patient_to_queue(struct patient_queue *patient_queue,
-                          struct Patient *patient) {
+                          struct Patient *patient, int id) {
 
-  patient->id = patient_queue->current_id;
-  patient_queue->current_id++;
-
-  get_triage(patient);
+  patient->id = id;
 
   switch (patient->triage_level) {
   case Red:
@@ -98,10 +95,29 @@ void add_patient_to_queue(struct patient_queue *patient_queue,
   }
 }
 
+void get_triage(struct Patient *patient) {
+
+  patient->triage_level = Blue;
+
+  if (patient->vitals) {
+    patient->triage_level = get_vital_triage(*patient->vitals);
+  }
+
+  if (patient->symptoms_head) {
+    enum Triage_Level symptoms_triage =
+        get_symptoms_triage(patient->symptoms_head);
+
+    if (patient->triage_level > symptoms_triage) {
+      patient->triage_level = symptoms_triage;
+    }
+  }
+}
+
 // ################################## VIEW ##################################
 
-void print_patient(struct Patient *patient) {
-  printf("name:%s age:%d id:%d\n", patient->name, patient->age, patient->id);
+void print_patient(struct Patient *p) {
+  printf("name:%s, age:%d, id:%d, gender:%d\n", p->name, p->age, p->id,
+         p->gender);
 }
 
 void print_circular_patient_list(struct patient_node *sl) {
@@ -133,25 +149,70 @@ void print_queue(struct patient_queue *patient_queue) {
   printf("\n");
 }
 
-void get_triage(struct Patient *patient) {
+int count_patients(struct patient_node *sl, int id, bool *patient_found) {
+  struct patient_node *cur;
 
-  patient->triage_level = Blue;
-
-  if (patient->vitals) {
-    patient->triage_level = get_vital_triage(*patient->vitals);
+  if (sl == NULL) {
+    return 0;
   }
 
-  if (patient->symptoms_head) {
-    enum Triage_Level symptoms_triage =
-        get_symptoms_triage(patient->symptoms_head);
+  cur = sl;
+  int count = 0;
 
-    if (patient->triage_level > symptoms_triage) {
-      patient->triage_level = symptoms_triage;
+  do {
+    struct Patient *patient = (struct Patient *)cur->data;
+    if (patient->id == id) {
+      *patient_found = true;
+      break;
     }
+    count++;
+    cur = cur->next;
+  } while (cur != NULL);
+
+  return count;
+}
+
+void print_triage_level_pov(struct patient_node *sl, int id, char *message,
+                            bool *pf) {
+  if (pf) {
+    return;
+  }
+  int patients = 0;
+  patients = count_patients(sl, id, pf);
+  if (patients > 0) {
+    printf("%s: %d\n", message, patients);
   }
 }
 
+void print_queue_patient_pov(struct patient_queue *pq, int id) {
+  clear_screen();
+  printf("Patients in front of you:\n");
+  bool patient_found = false;
+  print_triage_level_pov(pq->red_head, id, "RED", &patient_found);
+  print_triage_level_pov(pq->orange_head, id, "ORANGE", &patient_found);
+  print_triage_level_pov(pq->yellow_head, id, "YELLOW", &patient_found);
+  print_triage_level_pov(pq->green_head, id, "GREEN", &patient_found);
+  print_triage_level_pov(pq->blue_head, id, "BLUE", &patient_found);
+  printf("\n");
+}
+
 // ################################ CONTROLLER ################################
+
+void input_patient_name(struct Patient *patient) {
+  // Get patient Name
+  clear_screen();
+
+  while (true) {
+    clear_input_buffer();
+    printf("input patient name\n");
+    int res = scanf("%99[^\n]", patient->name);
+    if (res != 1) {
+      printf("Invalid input. Try again!\n");
+    } else {
+      break;
+    }
+  }
+}
 
 struct Patient *input_patient() {
 
@@ -166,17 +227,17 @@ struct Patient *input_patient() {
   }
 
   // Get patient Name
-  clear_screen();
-  input_string("input patient name", patient->name);
+  input_patient_name(patient);
 
   // Get patient Age
   clear_screen();
-  input_int("Input patient age", &patient->age);
+  input_int_with_min("Input patient age", &patient->age, 0);
 
   // Get patient Gender
   char choice;
   clear_screen();
-  input_char(&choice, "Input patient gender, (M)ale or (F)emale", "MmFf");
+  input_char(&choice, "Input patient gender, (M)ale or (F)emale, (O)ther",
+             "MmFfOo");
   switch (choice) {
   case 'M':
   case 'm':
@@ -185,6 +246,10 @@ struct Patient *input_patient() {
   case 'F':
   case 'f':
     patient->gender = Female;
+    break;
+  case 'O':
+  case 'o':
+    patient->gender = Other;
     break;
   }
 
@@ -220,9 +285,28 @@ struct Patient *input_patient() {
 }
 
 void remove_patient(struct patient_queue *pq) {
-  int id;
   clear_screen();
+  if (pq->current_id == 1) {
+    printf("There are no patients to remove. Please triage some patients!\n");
+    return;
+  }
+  int id;
   print_queue(pq);
-  input_int("Input id of patient", &id);
+  input_int_with_range("Input id of patient", &id, 1, pq->current_id - 1);
   remove_patient_from_queue(pq, id);
+  print_queue(pq);
+}
+
+void print_patient_pov(struct patient_queue *pq) {
+  clear_screen();
+  if (pq->current_id == 1) {
+    printf("There are no patients to print POV from. Please triage some "
+           "patients!\n");
+    return;
+  }
+  int id;
+  print_queue(pq);
+  input_int_with_range("Input id of patient", &id, 1, pq->current_id - 1);
+  clear_screen();
+  print_queue_patient_pov(pq, id);
 }

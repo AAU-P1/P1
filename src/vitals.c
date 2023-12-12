@@ -90,7 +90,8 @@ void input_vitals(struct Vitals *vitals) {
   }
 
   clear_screen();
-  input_int("Input Oxygen Saturation", &vitals->oxygen_saturation);
+  input_int_with_range("Input Oxygen Saturation", &vitals->oxygen_saturation, 0,
+                       100);
 
   // Get patient_vitals Airway
   clear_screen();
@@ -107,16 +108,19 @@ void input_vitals(struct Vitals *vitals) {
   }
 
   clear_screen();
-  input_int("Input Respiration Frequency", &vitals->respiration_frequency);
+  input_int_with_min("Input Respiration Frequency",
+                     &vitals->respiration_frequency, 0);
 
   clear_screen();
-  input_int("Input Pulse", &vitals->pulse);
+  input_int_with_min("Input Pulse", &vitals->pulse, 0);
 
   clear_screen();
-  input_int("Input Systolic Blood Pressure", &vitals->systolic_blood_pressure);
+  input_int_with_min("Input Systolic Blood Pressure",
+                     &vitals->systolic_blood_pressure, 0);
 
   clear_screen();
-  input_int("Input Glasgow Coma Scale Number", &vitals->glasgow_coma_scale);
+  input_int_with_range("Input Glasgow Coma Scale Number",
+                       &vitals->glasgow_coma_scale, 3, 15);
 
   clear_screen();
   input_double("Input Temperature Celcius", &vitals->temperature_celcius);

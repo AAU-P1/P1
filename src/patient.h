@@ -1,10 +1,11 @@
 #ifndef PATIENT_H
 #define PATIENT_H
 #include "triage_level.h"
+#include <stdbool.h>
 
 // ################################## MODEL ##################################
 
-enum Gender { Male, Female };
+enum Gender { Male, Female, Other };
 
 struct Patient {
   char name[100];
@@ -34,12 +35,11 @@ struct patient_node {
 
 struct patient_node *insert_tail(struct patient_node *sl, void *el);
 void add_patient_to_queue(struct patient_queue *patient_queue,
-                          struct Patient *patient);
+                          struct Patient *patient, int patient_id);
 
 void remove_patient_from_queue(struct patient_queue *pq, int p_id);
 
-struct patient_node *remove_patient_from_list(struct patient_node *sl,
-                                              int patient_id);
+struct patient_node *remove_patient_from_list(struct patient_node *sl, int id);
 
 // ################################## VIEW ##################################
 
@@ -47,9 +47,13 @@ void print_patient(struct Patient *patient);
 void print_circular_patient_list(struct patient_node *sl);
 void print_queue(struct patient_queue *patient_queue);
 
+int count_patients(struct patient_node *sl, int id, bool *patient_found);
+void print_queue_patient_pov(struct patient_queue *sl, int id);
+
 // ################################ CONTROLLER ################################
 
 struct Patient *input_patient();
 void remove_patient(struct patient_queue *pq);
+void print_patient_pov(struct patient_queue *pq);
 
 #endif

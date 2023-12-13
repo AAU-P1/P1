@@ -2,11 +2,9 @@
 #include "file.h"
 #include "patient.h"
 #include "symptoms.h"
-#include "symptoms/001_abstinence.h"
 #include "vitals.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(void) {
 
@@ -18,8 +16,8 @@ int main(void) {
   clear_screen();
   print_queue(&patient_queue);
   while (true) {
-    printf("(T)riage new patient | (R)emove Patient | (D)isplay Queue "
-           "| Display (P)OV Queue | (Q)uit\n");
+    printf("(T)riage new patient | (R)emove Patient | (D)isplay Queue "
+           "| Display (P)OV Queue | (Q)uit\n");
     choice = getchar();
     clear_input_buffer();
 

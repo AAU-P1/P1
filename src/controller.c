@@ -88,7 +88,7 @@ void clear_input_buffer() {
 
 void clear_screen() {
 #ifdef _WIN32
-  system("cls");
+  // system("cls");
 #else
   system("clear");
 #endif

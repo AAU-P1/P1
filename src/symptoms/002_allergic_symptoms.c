@@ -1,6 +1,5 @@
 #include "002_allergic_symptoms.h"
 #include "../controller.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 // ################################## MODEL ##################################

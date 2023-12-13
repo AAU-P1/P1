@@ -1,8 +1,6 @@
 #include "controller.h"
 #include "file.h"
 #include "patient.h"
-#include "symptoms.h"
-#include "vitals.h"
 #include <stdio.h>
 #include <stdlib.h>
 

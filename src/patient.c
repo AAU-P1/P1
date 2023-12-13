@@ -149,38 +149,27 @@ void print_queue(struct patient_queue *patient_queue) {
   printf("\n");
 }
 
-int count_patients(struct patient_node *sl, int id, bool *patient_found) {
-  struct patient_node *cur;
-
-  if (sl == NULL) {
-    return 0;
+void print_triage_level_pov(struct patient_node *sl, int id, char *message,
+                            bool *pf) {
+  if (*pf || sl == NULL) {
+    return;
   }
 
-  cur = sl;
+  struct patient_node *cur = sl;
   int count = 0;
 
   do {
     struct Patient *patient = (struct Patient *)cur->data;
     if (patient->id == id) {
-      *patient_found = true;
+      *pf = true;
       break;
     }
     count++;
     cur = cur->next;
   } while (cur != NULL);
 
-  return count;
-}
-
-void print_triage_level_pov(struct patient_node *sl, int id, char *message,
-                            bool *pf) {
-  if (pf) {
-    return;
-  }
-  int patients = 0;
-  patients = count_patients(sl, id, pf);
-  if (patients > 0) {
-    printf("%s: %d\n", message, patients);
+  if (count > 0) {
+    printf("%s: %d\n", message, count);
   }
 }
 

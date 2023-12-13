@@ -27,6 +27,8 @@ void load_patient_queue_from_file(struct patient_queue *pq) {
       pq->current_id = p->id + 1;
     }
   }
+
+  fclose(file);
 }
 void save_patient_queue_to_file(struct patient_queue *pq) {
   FILE *file;

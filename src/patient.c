@@ -275,7 +275,9 @@ struct Patient *input_patient() {
 
 void remove_patient(struct patient_queue *pq) {
   clear_screen();
-  if (pq->current_id == 1) {
+  if (pq->red_head == NULL && pq->orange_head == NULL &&
+      pq->yellow_head == NULL && pq->green_head == NULL &&
+      pq->blue_head == NULL) {
     printf("There are no patients to remove. Please triage some patients!\n");
     return;
   }
@@ -288,7 +290,9 @@ void remove_patient(struct patient_queue *pq) {
 
 void print_patient_pov(struct patient_queue *pq) {
   clear_screen();
-  if (pq->current_id == 1) {
+  if (pq->red_head == NULL && pq->orange_head == NULL &&
+      pq->yellow_head == NULL && pq->green_head == NULL &&
+      pq->blue_head == NULL) {
     printf("There are no patients to print POV from. Please triage some "
            "patients!\n");
     return;

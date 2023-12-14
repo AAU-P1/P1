@@ -11,6 +11,9 @@
 
 PatientNode *addPatientToList(PatientNode *head, void *patient) {
   PatientNode *newNode = (PatientNode *)malloc(sizeof(PatientNode));
+  if (newNode == NULL) {
+    exit(EXIT_FAILURE);
+  }
 
   PatientNode *cur;
 
@@ -216,6 +219,9 @@ void inputPatientName(Patient *patient) {
 Patient *inputPatient() {
 
   Patient *patient = (Patient *)malloc(sizeof(Patient));
+  if (patient == NULL) {
+    exit(EXIT_FAILURE);
+  }
   patient->vitals = NULL;
   patient->symptomsHead = NULL;
 
@@ -259,6 +265,9 @@ Patient *inputPatient() {
   case 'Y':
   case 'y':
     patient->vitals = (Vitals *)malloc(sizeof(Vitals));
+    if (patient->vitals == NULL) {
+      exit(EXIT_FAILURE);
+    }
     inputVitals(patient->vitals);
     break;
   }

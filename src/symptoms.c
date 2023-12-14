@@ -42,6 +42,9 @@ TriageLevel getSymptomTriage(SymptomNode *node) {
 
 SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId) {
   SymptomNode *newNode = (SymptomNode *)malloc(sizeof(SymptomNode));
+  if (newNode == NULL) {
+    exit(EXIT_FAILURE);
+  }
 
   SymptomNode *cur;
 

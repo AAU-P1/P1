@@ -42,6 +42,9 @@ TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence) {
 Abstinence *inputSymptomAbstinence() {
 
   Abstinence *abstinence = (Abstinence *)malloc(sizeof(Abstinence));
+  if (abstinence == NULL) {
+    exit(EXIT_FAILURE);
+  }
 
   char c;
   clearScreen();

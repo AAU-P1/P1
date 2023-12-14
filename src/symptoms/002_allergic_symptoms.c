@@ -41,6 +41,9 @@ TriageLevel getSymptomAllergicTriage(Allergic allergic) {
 Allergic *inputSymptomAllergic() {
 
   Allergic *allergic = (Allergic *)malloc(sizeof(Allergic));
+  if (allergic == NULL) {
+    exit(EXIT_FAILURE);
+  }
 
   char c;
   clearScreen();

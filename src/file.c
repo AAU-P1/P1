@@ -18,6 +18,9 @@ void loadPatientQueueFromFile(PatientQueue *patientQueue) {
     /* note that fgets don't strip the terminating \n, checking its
        presence would allow to handle lines longer that sizeof(line) */
     Patient *patient = (Patient *)malloc(sizeof(Patient));
+    if (patient == NULL) {
+      exit(EXIT_FAILURE);
+    }
 
     sscanf(line, "%99[^,],%d,%d,%d,%d\n", patient->name, &patient->age,
            &patient->id, &patient->triageLevel, &patient->gender);

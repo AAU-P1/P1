@@ -1,7 +1,9 @@
-#include "controller.h"
+#include "input.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+// ############################ CONTROLLER/VIEW #############################
 
 void inputIntWithRange(char *message, int *dest, int low, int high) {
   while (true) {

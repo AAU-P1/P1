@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+// ############################ CONTROLLER/VIEW #############################
 void inputIntWithRange(char *message, int *dest, int low, int high);
 void inputIntWithMin(char *message, int *dest, int low);
 void inputDouble(char *message, double *dest);

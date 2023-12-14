@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void load_patient_queue_from_file(struct patient_queue *pq) {
+void loadPatientQueueFromFile(PatientQueue *patientQueue) {
   FILE *file;
 
   file = fopen("STATE", "r");
@@ -17,52 +17,52 @@ void load_patient_queue_from_file(struct patient_queue *pq) {
   while (fgets(line, sizeof(line), file)) {
     /* note that fgets don't strip the terminating \n, checking its
        presence would allow to handle lines longer that sizeof(line) */
-    struct Patient *p = (struct Patient *)malloc(sizeof(struct Patient));
+    Patient *patient = (Patient *)malloc(sizeof(Patient));
 
-    sscanf(line, "%99[^,],%d,%d,%d,%d\n", p->name, &p->age, &p->id,
-           &p->triage_level, &p->gender);
+    sscanf(line, "%99[^,],%d,%d,%d,%d\n", patient->name, &patient->age,
+           &patient->id, &patient->triageLevel, &patient->gender);
 
-    add_patient_to_queue(pq, p, p->id);
-    if (p->id >= pq->current_id) {
-      pq->current_id = p->id + 1;
+    addPatientToQueue(patientQueue, patient, patient->id);
+    if (patient->id >= patientQueue->currentId) {
+      patientQueue->currentId = patient->id + 1;
     }
   }
 
   fclose(file);
 }
-void save_patient_queue_to_file(struct patient_queue *pq) {
+void savePatientQueueToFile(PatientQueue *patientQueue) {
   FILE *file;
 
   // Open a file in writing mode
   file = fopen("STATE", "w");
 
-  save_patient_list_to_file(pq->red_head, file);
-  save_patient_list_to_file(pq->orange_head, file);
-  save_patient_list_to_file(pq->yellow_head, file);
-  save_patient_list_to_file(pq->green_head, file);
-  save_patient_list_to_file(pq->blue_head, file);
+  savePatientListToFile(patientQueue->redHead, file);
+  savePatientListToFile(patientQueue->orangeHead, file);
+  savePatientListToFile(patientQueue->yellowHead, file);
+  savePatientListToFile(patientQueue->greenHead, file);
+  savePatientListToFile(patientQueue->blueHead, file);
 
   fclose(file);
 }
 
-void save_patient_list_to_file(struct patient_node *sl, FILE *file) {
+void savePatientListToFile(PatientNode *list, FILE *file) {
 
-  struct patient_node *cur;
+  PatientNode *cur;
 
-  if (sl == NULL) {
+  if (list == NULL) {
     return;
   }
-  cur = sl;
+  cur = list;
 
   do {
-    struct Patient *patient = (struct Patient *)cur->data;
-    save_patient_to_file(patient, file);
+    Patient *patient = (Patient *)cur->data;
+    savePatientToFile(patient, file);
     cur = cur->next;
   } while (cur != NULL);
 }
 
-void save_patient_to_file(struct Patient *p, FILE *file) {
+void savePatientToFile(Patient *patient, FILE *file) {
 
-  fprintf(file, "%s,%d,%d,%d,%d\n", p->name, p->age, p->id, p->triage_level,
-          p->gender);
+  fprintf(file, "%s,%d,%d,%d,%d\n", patient->name, patient->age, patient->id,
+          patient->triageLevel, patient->gender);
 }

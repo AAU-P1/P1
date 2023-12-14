@@ -5,24 +5,24 @@
 
 // ################################## MODEL ##################################
 
-enum Airway { Blocked, Free, Inspiratory_stridor };
+typedef enum { V_BLOCKED, V_FREE, V_INSPIRATORY_STRIDOR } Airway;
 
-struct Vitals {
-  enum Airway airway;
-  int oxygen_saturation;
-  bool with_oxygen;
-  int respiration_frequency;
+typedef struct {
+  Airway airway;
+  int oxygenSaturation;
+  bool withOxygen;
+  int respirationFrequency;
   int pulse;
-  int systolic_blood_pressure;
-  int glasgow_coma_scale;
-  double temperature_celcius;
-  bool with_kol;
-};
+  int systolicBloodPressure;
+  int glasgowComaScale;
+  double temperatureCelcius;
+  bool withKol;
+} Vitals;
 
-enum Triage_Level get_vital_triage(struct Vitals vitals);
+TriageLevel getVitalTriage(Vitals vitals);
 
 // ################################ CONTROLLER ################################
 
-void input_vitals(struct Vitals *vitals);
+void inputVitals(Vitals *vitals);
 
 #endif

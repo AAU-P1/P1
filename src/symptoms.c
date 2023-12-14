@@ -1,84 +1,84 @@
 #include "symptoms.h"
 #include "controller.h"
+#include "symptoms/001_abstinence.h"
 #include "symptoms/002_allergic_symptoms.h"
+#include "triage_level.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 // ################################## MODEL ##################################
 
-enum Triage_Level get_symptoms_triage(struct symptom_node *sn) {
-  enum Triage_Level triage_level = Blue;
+TriageLevel getSymptomListTriage(SymptomNode *head) {
+  TriageLevel triageLevel = T_BLUE;
 
-  struct symptom_node *cur;
+  SymptomNode *cur;
 
-  if (sn == NULL) {
-    return triage_level;
+  if (head == NULL) {
+    return triageLevel;
   }
-  cur = sn;
+  cur = head;
 
   do {
-    enum Triage_Level cur_triage = triage_from_symptom(sn);
-    if (triage_level > cur_triage) {
-      triage_level = cur_triage;
+    TriageLevel curTriage = getSymptomTriage(cur);
+    if (triageLevel > curTriage) {
+      triageLevel = curTriage;
     }
     cur = cur->next;
   } while (cur != NULL);
 
-  return triage_level;
+  return triageLevel;
 }
 
-enum Triage_Level triage_from_symptom(struct symptom_node *sn) {
-  if (sn->symptom_id == 1) {
-    struct Abstinence *abstinence = (struct Abstinence *)sn->data;
-    return get_symptoms_abstinence_triage(*abstinence);
-  } else if (sn->symptom_id == 2) {
-    struct Allergic *allergic = (struct Allergic *)sn->data;
-    return get_symptoms_allergic(*allergic);
+TriageLevel getSymptomTriage(SymptomNode *node) {
+  if (node->symptomId == 1) {
+    Abstinence *abstinence = (Abstinence *)node->data;
+    return getSymptomAbstinenceTriage(*abstinence);
+  } else if (node->symptomId == 2) {
+    Allergic *allergic = (Allergic *)node->data;
+    return getSymptomAllergicTriage(*allergic);
   }
-  return Blue;
+  return T_BLUE;
 }
 
-struct symptom_node *add_symptom(struct symptom_node *sl, void *el,
-                                 int symptom_id) {
-  struct symptom_node *new_node =
-      (struct symptom_node *)malloc(sizeof(struct symptom_node));
+SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId) {
+  SymptomNode *newNode = (SymptomNode *)malloc(sizeof(SymptomNode));
 
-  struct symptom_node *cur;
+  SymptomNode *cur;
 
-  new_node->data = el;
-  new_node->symptom_id = symptom_id;
-  new_node->next = NULL;
+  newNode->data = symptom;
+  newNode->symptomId = symptomId;
+  newNode->next = NULL;
 
-  if (sl == NULL) {
-    return new_node;
+  if (head == NULL) {
+    return newNode;
   }
 
-  cur = sl;
+  cur = head;
 
   while (cur->next != NULL) {
     cur = cur->next;
   }
 
-  cur->next = new_node;
-  return sl;
+  cur->next = newNode;
+  return head;
 }
 
 // ################################ CONTROLLER ################################
 
-struct symptom_node *input_symptoms(struct symptom_node *sn) {
+SymptomNode *inputSymptoms(SymptomNode *head) {
 
-  int symptom_id;
+  int symptomId;
 
-  clear_screen();
-  input_int_with_range(
+  clearScreen();
+  inputIntWithRange(
       "Please choose one of the following:\n(1) Abstinence or (2) Allergic)",
-      &symptom_id, 1, 2);
-  if (symptom_id == 1) {
-    struct Abstinence *abstinence = input_abstinence_symptom();
-    sn = add_symptom(sn, abstinence, symptom_id);
-  } else if (symptom_id == 2) {
-    struct Allergic *allergic = input_allergic_symptom();
-    sn = add_symptom(sn, allergic, symptom_id);
+      &symptomId, 1, 2);
+  if (symptomId == 1) {
+    Abstinence *abstinence = inputSymptomAbstinence();
+    head = addSymptomToList(head, abstinence, symptomId);
+  } else if (symptomId == 2) {
+    Allergic *allergic = inputSymptomAllergic();
+    head = addSymptomToList(head, allergic, symptomId);
   }
-  return sn;
+  return head;
 }

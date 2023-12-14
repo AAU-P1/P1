@@ -5,21 +5,26 @@
 
 // ################################## MODEL ##################################
 
-enum Allergic_swelling { AS_yes_stridor, AS_yes_mush, AS_none };
-enum Allergic_short_breath { ASB_Severe_rd, ASB_rd, ASB_none };
-enum Allergic_urticaria { AU_universal, AU_pronounced, AU_local, AU_none };
+typedef enum { AS_YES_STRIDOR, AS_YES_MUSH, AS_NONE } AllergicSwelling;
+typedef enum { ASB_SEVERE_RD, ASB_RD, ASB_NONE } AllergicShortBreath;
+typedef enum {
+  AU_UNIVERSAL,
+  AU_PRONOUNCED,
+  AU_LOCAL,
+  AU_NONE
+} AllergicUrticaria;
 
-struct Allergic {
-  enum Allergic_swelling swelling;
-  enum Allergic_short_breath short_breath;
-  bool prev_anaphyl_shock;
-  bool itchy_throat;
-  enum Allergic_urticaria urticaria;
-};
+typedef struct {
+  AllergicSwelling swelling;
+  AllergicShortBreath shortBreath;
+  bool prevAnaphylShock;
+  bool itchyThroat;
+  AllergicUrticaria urticaria;
+} Allergic;
 
-enum Triage_Level get_symptoms_allergic(struct Allergic allergic);
+TriageLevel getSymptomAllergicTriage(Allergic allergic);
 
 // ################################ CONTROLLER ################################
 
-struct Allergic *input_allergic_symptom();
+Allergic *inputSymptomAllergic();
 #endif

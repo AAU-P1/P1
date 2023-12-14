@@ -1,127 +1,123 @@
 #include "vitals.h"
 #include "controller.h"
+#include "triage_level.h"
 
 // ################################## MODEL ##################################
 
-enum Triage_Level get_vital_triage(struct Vitals vitals) {
-  enum Triage_Level triage_level = Green;
+TriageLevel getVitalTriage(Vitals vitals) {
+  TriageLevel triageLevel = T_GREEN;
 
-  bool red = vitals.airway == Blocked || vitals.airway == Inspiratory_stridor ||
-             (vitals.oxygen_saturation < 90 && vitals.with_oxygen) ||
-             (vitals.oxygen_saturation < 80 && !vitals.with_oxygen) ||
-             (vitals.oxygen_saturation < 85 && vitals.with_oxygen &&
-              vitals.with_kol) ||
-             (vitals.oxygen_saturation < 75 && !vitals.with_oxygen &&
-              vitals.with_kol) ||
-             vitals.respiration_frequency > 35 ||
-             vitals.respiration_frequency < 8 || vitals.pulse > 140 ||
-             vitals.systolic_blood_pressure < 80 ||
-             vitals.glasgow_coma_scale <= 8 || vitals.temperature_celcius < 32;
+  bool red =
+      vitals.airway == V_BLOCKED || vitals.airway == V_INSPIRATORY_STRIDOR ||
+      (vitals.oxygenSaturation < 90 && vitals.withOxygen) ||
+      (vitals.oxygenSaturation < 80 && !vitals.withOxygen) ||
+      (vitals.oxygenSaturation < 85 && vitals.withOxygen && vitals.withKol) ||
+      (vitals.oxygenSaturation < 75 && !vitals.withOxygen && vitals.withKol) ||
+      vitals.respirationFrequency > 35 || vitals.respirationFrequency < 8 ||
+      vitals.pulse > 140 || vitals.systolicBloodPressure < 80 ||
+      vitals.glasgowComaScale <= 8 || vitals.temperatureCelcius < 32;
 
   bool orange =
-      (vitals.oxygen_saturation < 95 && vitals.with_oxygen) ||
-      (vitals.oxygen_saturation < 90 && !vitals.with_oxygen) ||
-      (vitals.oxygen_saturation < 90 && vitals.with_oxygen &&
-       vitals.with_kol) ||
-      (vitals.oxygen_saturation < 85 && !vitals.with_oxygen &&
-       vitals.with_kol) ||
-      vitals.respiration_frequency > 30 || vitals.pulse > 120 ||
-      vitals.pulse < 40 || vitals.systolic_blood_pressure < 90 ||
-      vitals.glasgow_coma_scale <= 13 && vitals.glasgow_coma_scale >= 9 ||
-      vitals.temperature_celcius >= 32 && vitals.temperature_celcius <= 34 ||
-      vitals.temperature_celcius > 40;
+      (vitals.oxygenSaturation < 95 && vitals.withOxygen) ||
+      (vitals.oxygenSaturation < 90 && !vitals.withOxygen) ||
+      (vitals.oxygenSaturation < 90 && vitals.withOxygen && vitals.withKol) ||
+      (vitals.oxygenSaturation < 85 && !vitals.withOxygen && vitals.withKol) ||
+      vitals.respirationFrequency > 30 || vitals.pulse > 120 ||
+      vitals.pulse < 40 || vitals.systolicBloodPressure < 90 ||
+      vitals.glasgowComaScale <= 13 && vitals.glasgowComaScale >= 9 ||
+      vitals.temperatureCelcius >= 32 && vitals.temperatureCelcius <= 34 ||
+      vitals.temperatureCelcius > 40;
 
-  bool yellow = (vitals.oxygen_saturation < 95 && !vitals.with_oxygen) ||
-                (vitals.oxygen_saturation < 90 && !vitals.with_oxygen &&
-                 vitals.with_kol) ||
-                vitals.respiration_frequency > 25 || vitals.pulse > 110 ||
-                vitals.pulse < 50 || vitals.glasgow_coma_scale == 14 ||
-                vitals.temperature_celcius > 38;
+  bool yellow =
+      (vitals.oxygenSaturation < 95 && !vitals.withOxygen) ||
+      (vitals.oxygenSaturation < 90 && !vitals.withOxygen && vitals.withKol) ||
+      vitals.respirationFrequency > 25 || vitals.pulse > 110 ||
+      vitals.pulse < 50 || vitals.glasgowComaScale == 14 ||
+      vitals.temperatureCelcius > 38;
 
   if (red) {
-    triage_level = Red;
+    triageLevel = T_RED;
   } else if (orange) {
-    triage_level = Orange;
+    triageLevel = T_ORANGE;
   } else if (yellow) {
-    triage_level = Yellow;
+    triageLevel = T_YELLOW;
   } else {
-    triage_level = Green;
+    triageLevel = T_GREEN;
   }
 
-  return triage_level;
+  return triageLevel;
 }
 
 // ################################ CONTROLLER ################################
 
-void input_vitals(struct Vitals *vitals) {
-  char choice;
-  clear_screen();
-  input_char(&choice,
-             "Is the airway: (B)locked (F)ree or (I)nspiratory Stridor?",
-             "BbFfIi");
+void inputVitals(Vitals *vitals) {
+  char c;
+  clearScreen();
+  inputChar(&c, "Is the airway: (B)locked (F)ree or (I)nspiratory Stridor?",
+            "BbFfIi");
 
-  switch (choice) {
+  switch (c) {
   case 'B':
   case 'b':
-    vitals->airway = Blocked;
+    vitals->airway = V_BLOCKED;
     break;
   case 'F':
   case 'f':
-    vitals->airway = Free;
+    vitals->airway = V_FREE;
     break;
   case 'I':
   case 'i':
-    vitals->airway = Inspiratory_stridor;
+    vitals->airway = V_INSPIRATORY_STRIDOR;
     break;
   }
 
   // Get patient_vitals Kol
-  clear_screen();
-  input_char(&choice, "Is the patient with kol? (Y)es  (N)o", "YyNn");
-  switch (choice) {
+  clearScreen();
+  inputChar(&c, "Is the patient with kol? (Y)es  (N)o", "YyNn");
+  switch (c) {
   case 'Y':
   case 'y':
-    vitals->with_kol = true;
+    vitals->withKol = true;
     break;
   case 'N':
   case 'n':
-    vitals->with_kol = false;
+    vitals->withKol = false;
     break;
   }
 
-  clear_screen();
-  input_int_with_range("Input Oxygen Saturation", &vitals->oxygen_saturation, 0,
-                       100);
+  clearScreen();
+  inputIntWithRange("Input Oxygen Saturation", &vitals->oxygenSaturation, 0,
+                    100);
 
   // Get patient_vitals Airway
-  clear_screen();
-  input_char(&choice, "Is the patient with oxygen? (Y)es  (N)o", "YyNn");
-  switch (choice) {
+  clearScreen();
+  inputChar(&c, "Is the patient with oxygen? (Y)es  (N)o", "YyNn");
+  switch (c) {
   case 'Y':
   case 'y':
-    vitals->with_oxygen = true;
+    vitals->withOxygen = true;
     break;
   case 'N':
   case 'n':
-    vitals->with_oxygen = false;
+    vitals->withOxygen = false;
     break;
   }
 
-  clear_screen();
-  input_int_with_min("Input Respiration Frequency",
-                     &vitals->respiration_frequency, 0);
+  clearScreen();
+  inputIntWithMin("Input Respiration Frequency", &vitals->respirationFrequency,
+                  0);
 
-  clear_screen();
-  input_int_with_min("Input Pulse", &vitals->pulse, 0);
+  clearScreen();
+  inputIntWithMin("Input Pulse", &vitals->pulse, 0);
 
-  clear_screen();
-  input_int_with_min("Input Systolic Blood Pressure",
-                     &vitals->systolic_blood_pressure, 0);
+  clearScreen();
+  inputIntWithMin("Input Systolic Blood Pressure",
+                  &vitals->systolicBloodPressure, 0);
 
-  clear_screen();
-  input_int_with_range("Input Glasgow Coma Scale Number",
-                       &vitals->glasgow_coma_scale, 3, 15);
+  clearScreen();
+  inputIntWithRange("Input Glasgow Coma Scale Number",
+                    &vitals->glasgowComaScale, 3, 15);
 
-  clear_screen();
-  input_double("Input Temperature Celcius", &vitals->temperature_celcius);
+  clearScreen();
+  inputDouble("Input Temperature Celcius", &vitals->temperatureCelcius);
 }

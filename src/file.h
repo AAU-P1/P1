@@ -3,9 +3,9 @@
 #include "patient.h"
 #include <stdio.h>
 
-void load_patient_queue_from_file(struct patient_queue *pq);
-void save_patient_queue_to_file(struct patient_queue *pq);
+void loadPatientQueueFromFile(PatientQueue *patientQueue);
+void savePatientQueueToFile(PatientQueue *patientQueue);
 
-void save_patient_list_to_file(struct patient_node *sl, FILE *file);
-void save_patient_to_file(struct Patient *p, FILE *file);
+void savePatientListToFile(PatientNode *list, FILE *file);
+void savePatientToFile(Patient *patient, FILE *file);
 #endif

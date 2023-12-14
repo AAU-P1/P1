@@ -5,22 +5,27 @@
 
 // ################################## MODEL ##################################
 
-enum Abstinence_cramps {
-  AC_ongoing,
-  AC_now_discontinued,
-  AC_by_previous_contact,
-  AC_none
-};
-enum Abstinence_restless { AC_yes_w_conf_or_haluc, AC_yes, AC_easy_or_none };
+typedef enum {
+  AC_ONGOING,
+  AC_NOW_DISCONTINUED,
+  AC_BY_PREVIOUS_CONTACT,
+  AC_NONE
+} AbstinenceCramps;
 
-struct Abstinence {
-  enum Abstinence_cramps cramps;
-  enum Abstinence_restless restless;
-};
+typedef enum {
+  AR_YES_W_CONF_OR_HALUC,
+  AR_YES,
+  AR_EASY_OR_NONE
+} AbstinenceRestless;
 
-enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence);
+typedef struct {
+  AbstinenceCramps cramps;
+  AbstinenceRestless restless;
+} Abstinence;
+
+TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence);
 
 // ################################ CONTROLLER ################################
 
-struct Abstinence *input_abstinence_symptom();
+Abstinence *inputSymptomAbstinence();
 #endif

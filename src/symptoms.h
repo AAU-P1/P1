@@ -7,16 +7,18 @@
 
 // ################################## MODEL ##################################
 
-struct symptom_node {
+typedef struct SymptomNode SymptomNode;
+struct SymptomNode {
   void *data;
-  int symptom_id;
-  struct symptom_node *next;
+  int symptomId;
+  SymptomNode *next;
 };
 
-enum Triage_Level get_symptoms_triage(struct symptom_node *symptom_node);
-enum Triage_Level triage_from_symptom(struct symptom_node *sn);
+TriageLevel getSymptomListTriage(SymptomNode *head);
+TriageLevel getSymptomTriage(SymptomNode *node);
+SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId);
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW ############################
 
-struct symptom_node *input_symptoms(struct symptom_node *sn);
+SymptomNode *inputSymptoms(SymptomNode *head);
 #endif

@@ -9,190 +9,200 @@
 
 // ################################## MODEL ##################################
 
-struct patient_node *insert_tail(struct patient_node *sl, void *el) {
-  struct patient_node *new_node =
-      (struct patient_node *)malloc(sizeof(struct patient_node));
+PatientNode *addPatientToList(PatientNode *head, void *patient) {
+  PatientNode *newNode = (PatientNode *)malloc(sizeof(PatientNode));
 
-  struct patient_node *cur;
+  PatientNode *cur;
 
-  new_node->data = el;
-  new_node->next = NULL;
+  newNode->data = patient;
+  newNode->next = NULL;
 
-  if (sl == NULL) {
-    return new_node;
+  if (head == NULL) {
+    return newNode;
   }
-  cur = sl;
+  cur = head;
 
   while (cur->next != NULL) {
     cur = cur->next;
   }
 
-  cur->next = new_node;
-  return sl;
+  cur->next = newNode;
+  return head;
 }
 
-void remove_patient_from_queue(struct patient_queue *pq, int p_id) {
-  pq->red_head = remove_patient_from_list(pq->red_head, p_id);
-  pq->orange_head = remove_patient_from_list(pq->orange_head, p_id);
-  pq->yellow_head = remove_patient_from_list(pq->yellow_head, p_id);
-  pq->green_head = remove_patient_from_list(pq->green_head, p_id);
-  pq->blue_head = remove_patient_from_list(pq->blue_head, p_id);
+void removePatientFromQueue(PatientQueue *patientQueue, int id) {
+  patientQueue->redHead = removePatientFromList(patientQueue->redHead, id);
+  patientQueue->orangeHead =
+      removePatientFromList(patientQueue->orangeHead, id);
+  patientQueue->yellowHead =
+      removePatientFromList(patientQueue->yellowHead, id);
+  patientQueue->greenHead = removePatientFromList(patientQueue->greenHead, id);
+  patientQueue->blueHead = removePatientFromList(patientQueue->blueHead, id);
 }
 
-struct patient_node *remove_patient_from_list(struct patient_node *sl,
-                                              int patient_id) {
-  if (sl == NULL) {
-    return sl;
+PatientNode *removePatientFromList(PatientNode *head, int id) {
+  if (head == NULL) {
+    return head;
   }
 
-  struct patient_node *cur, *prev;
-  cur = sl;
+  PatientNode *cur, *prev;
+  cur = head;
   prev = NULL;
 
   do {
-    struct Patient *patient = (struct Patient *)cur->data;
-    if (patient->id == patient_id) {
+    Patient *patient = (Patient *)cur->data;
+    if (patient->id == id) {
 
       if (prev == NULL) {
-        struct patient_node *new_head = cur->next;
+        PatientNode *newHead = cur->next;
         free(cur);
-        return new_head;
+        return newHead;
       } else {
         prev->next = cur->next;
         free(cur);
-        return sl;
+        return head;
       }
     }
     prev = cur;
     cur = cur->next;
   } while (cur != NULL);
-  return sl;
+  return head;
 }
 
-void add_patient_to_queue(struct patient_queue *patient_queue,
-                          struct Patient *patient, int id) {
+void addPatientToQueue(PatientQueue *patientQueue, Patient *patient, int id) {
 
   patient->id = id;
 
-  switch (patient->triage_level) {
-  case Red:
-    patient_queue->red_head = insert_tail(patient_queue->red_head, patient);
+  switch (patient->triageLevel) {
+  case T_RED:
+    patientQueue->redHead = addPatientToList(patientQueue->redHead, patient);
     break;
-  case Orange:
-    patient_queue->orange_head =
-        insert_tail(patient_queue->orange_head, patient);
+  case T_ORANGE:
+    patientQueue->orangeHead =
+        addPatientToList(patientQueue->orangeHead, patient);
     break;
-  case Yellow:
-    patient_queue->yellow_head =
-        insert_tail(patient_queue->yellow_head, patient);
+  case T_YELLOW:
+    patientQueue->yellowHead =
+        addPatientToList(patientQueue->yellowHead, patient);
     break;
-  case Green:
-    patient_queue->green_head = insert_tail(patient_queue->green_head, patient);
+  case T_GREEN:
+    patientQueue->greenHead =
+        addPatientToList(patientQueue->greenHead, patient);
     break;
-  case Blue:
-    patient_queue->blue_head = insert_tail(patient_queue->blue_head, patient);
+  case T_BLUE:
+    patientQueue->blueHead = addPatientToList(patientQueue->blueHead, patient);
     break;
   }
 }
 
-void get_triage(struct Patient *patient) {
+void triagePatient(Patient *patient) {
 
-  patient->triage_level = Blue;
+  patient->triageLevel = T_BLUE;
 
   if (patient->vitals) {
-    patient->triage_level = get_vital_triage(*patient->vitals);
+    patient->triageLevel = getVitalTriage(*patient->vitals);
   }
 
-  if (patient->symptoms_head) {
-    enum Triage_Level symptoms_triage =
-        get_symptoms_triage(patient->symptoms_head);
+  if (patient->symptomsHead) {
+    TriageLevel symptomsTriage = getSymptomListTriage(patient->symptomsHead);
 
-    if (patient->triage_level > symptoms_triage) {
-      patient->triage_level = symptoms_triage;
+    if (patient->triageLevel > symptomsTriage) {
+      patient->triageLevel = symptomsTriage;
     }
   }
 }
 
 // ################################## VIEW ##################################
 
-void print_patient(struct Patient *p) {
-  printf("name:%s, age:%d, id:%d, gender:%d\n", p->name, p->age, p->id,
-         p->gender);
+void printPatient(Patient *patient) {
+  printf("name:%s, age:%d, id:%d ", patient->name, patient->age, patient->id);
+
+  switch (patient->gender) {
+  case GENDER_MALE:
+    printf("gender:male\n");
+    break;
+  case GENDER_FEMALE:
+    printf("gender:female\n");
+    break;
+  case GENDER_OTHER:
+    printf("gender:other\n");
+    break;
+  }
 }
 
-void print_circular_patient_list(struct patient_node *sl) {
-  struct patient_node *cur;
+void printPatientList(PatientNode *head) {
+  PatientNode *cur;
 
-  if (sl == NULL) {
+  if (head == NULL) {
     return;
   }
-  cur = sl;
+  cur = head;
 
   do {
-    print_patient(cur->data);
+    printPatient(cur->data);
     cur = cur->next;
   } while (cur != NULL);
 }
 
-void print_queue(struct patient_queue *patient_queue) {
-  clear_screen();
+void printPatientQueue(PatientQueue *patientQueue) {
+  clearScreen();
   printf("\nRED:\n");
-  print_circular_patient_list(patient_queue->red_head);
+  printPatientList(patientQueue->redHead);
   printf("\nORANGE:\n");
-  print_circular_patient_list(patient_queue->orange_head);
+  printPatientList(patientQueue->orangeHead);
   printf("\nYELLOW:\n");
-  print_circular_patient_list(patient_queue->yellow_head);
+  printPatientList(patientQueue->yellowHead);
   printf("\nGREEN:\n");
-  print_circular_patient_list(patient_queue->green_head);
+  printPatientList(patientQueue->greenHead);
   printf("\nBLUE:\n");
-  print_circular_patient_list(patient_queue->blue_head);
+  printPatientList(patientQueue->blueHead);
   printf("\n");
 }
 
-void print_triage_level_pov(struct patient_node *sl, int id, char *message,
-                            bool *pf) {
-  if (*pf || sl == NULL) {
+void printPatientListPOV(PatientNode *head, int id, char *message,
+                         bool *patientFound) {
+  if (*patientFound || head == NULL) {
     return;
   }
 
-  struct patient_node *cur = sl;
-  int count = 0;
+  PatientNode *cur = head;
+  int n = 0;
 
   do {
-    struct Patient *patient = (struct Patient *)cur->data;
+    Patient *patient = (Patient *)cur->data;
     if (patient->id == id) {
-      *pf = true;
+      *patientFound = true;
       break;
     }
-    count++;
+    n++;
     cur = cur->next;
   } while (cur != NULL);
 
-  if (count > 0) {
-    printf("%s: %d\n", message, count);
+  if (n > 0) {
+    printf("%s: %d\n", message, n);
   }
 }
 
-void print_queue_patient_pov(struct patient_queue *pq, int id) {
-  clear_screen();
+void printPatientQueuePOV(PatientQueue *patientQueue, int id) {
+  clearScreen();
   printf("Patients in front of you:\n");
-  bool patient_found = false;
-  print_triage_level_pov(pq->red_head, id, "RED", &patient_found);
-  print_triage_level_pov(pq->orange_head, id, "ORANGE", &patient_found);
-  print_triage_level_pov(pq->yellow_head, id, "YELLOW", &patient_found);
-  print_triage_level_pov(pq->green_head, id, "GREEN", &patient_found);
-  print_triage_level_pov(pq->blue_head, id, "BLUE", &patient_found);
+  bool patientFound = false;
+  printPatientListPOV(patientQueue->redHead, id, "RED", &patientFound);
+  printPatientListPOV(patientQueue->orangeHead, id, "ORANGE", &patientFound);
+  printPatientListPOV(patientQueue->yellowHead, id, "YELLOW", &patientFound);
+  printPatientListPOV(patientQueue->greenHead, id, "GREEN", &patientFound);
+  printPatientListPOV(patientQueue->blueHead, id, "BLUE", &patientFound);
   printf("\n");
 }
 
 // ################################ CONTROLLER ################################
 
-void input_patient_name(struct Patient *patient) {
+void inputPatientName(Patient *patient) {
   // Get patient Name
-  clear_screen();
+  clearScreen();
 
   while (true) {
-    clear_input_buffer();
+    clearInputBuffer();
     printf("input patient name\n");
     int res = scanf("%99[^\n]", patient->name);
     if (res != 1) {
@@ -203,11 +213,11 @@ void input_patient_name(struct Patient *patient) {
   }
 }
 
-struct Patient *input_patient() {
+Patient *inputPatient() {
 
-  struct Patient *patient = (struct Patient *)malloc(sizeof(struct Patient));
+  Patient *patient = (Patient *)malloc(sizeof(Patient));
   patient->vitals = NULL;
-  patient->symptoms_head = NULL;
+  patient->symptomsHead = NULL;
 
   // Check if memory allocation is successful
   if (patient == NULL) {
@@ -216,90 +226,88 @@ struct Patient *input_patient() {
   }
 
   // Get patient Name
-  input_patient_name(patient);
+  inputPatientName(patient);
 
   // Get patient Age
-  clear_screen();
-  input_int_with_min("Input patient age", &patient->age, 0);
+  clearScreen();
+  inputIntWithMin("Input patient age", &patient->age, 0);
 
   // Get patient Gender
-  char choice;
-  clear_screen();
-  input_char(&choice, "Input patient gender, (M)ale or (F)emale, (O)ther",
-             "MmFfOo");
-  switch (choice) {
+  char c;
+  clearScreen();
+  inputChar(&c, "Input patient gender, (M)ale or (F)emale, (O)ther", "MmFfOo");
+  switch (c) {
   case 'M':
   case 'm':
-    patient->gender = Male;
+    patient->gender = GENDER_MALE;
     break;
   case 'F':
   case 'f':
-    patient->gender = Female;
+    patient->gender = GENDER_FEMALE;
     break;
   case 'O':
   case 'o':
-    patient->gender = Other;
+    patient->gender = GENDER_OTHER;
     break;
   }
 
   // Get patient Vitals
-  clear_screen();
-  input_char(&choice, "Would you like to input Vital Parameters? (Y)es  (N)o",
-             "YyNn");
-  switch (choice) {
+  clearScreen();
+  inputChar(&c, "Would you like to input Vital Parameters? (Y)es  (N)o",
+            "YyNn");
+  switch (c) {
   case 'Y':
   case 'y':
-    patient->vitals = (struct Vitals *)malloc(sizeof(struct Vitals));
-    input_vitals(patient->vitals);
+    patient->vitals = (Vitals *)malloc(sizeof(Vitals));
+    inputVitals(patient->vitals);
     break;
   }
 
-  get_triage(patient);
+  triagePatient(patient);
 
-  if (patient->triage_level != Red) {
-
-    // Get patient Symptoms
-    clear_screen();
-    input_char(&choice, "Would you like to input Symptoms? (Y)es  (N)o",
-               "YyNn");
-    switch (choice) {
-    case 'Y':
-    case 'y':
-      patient->symptoms_head = input_symptoms(patient->symptoms_head);
-      break;
-    }
+  if (patient->triageLevel == T_RED) {
+    return patient;
+  }
+  // Get patient Symptoms
+  clearScreen();
+  inputChar(&c, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
+  switch (c) {
+  case 'Y':
+  case 'y':
+    patient->symptomsHead = inputSymptoms(patient->symptomsHead);
+    break;
   }
 
   return patient;
 }
 
-void remove_patient(struct patient_queue *pq) {
-  clear_screen();
-  if (pq->red_head == NULL && pq->orange_head == NULL &&
-      pq->yellow_head == NULL && pq->green_head == NULL &&
-      pq->blue_head == NULL) {
+void removePatient(PatientQueue *patientQueue) {
+  clearScreen();
+  if (patientQueue->redHead == NULL && patientQueue->orangeHead == NULL &&
+      patientQueue->yellowHead == NULL && patientQueue->greenHead == NULL &&
+      patientQueue->blueHead == NULL) {
     printf("There are no patients to remove. Please triage some patients!\n");
     return;
   }
   int id;
-  print_queue(pq);
-  input_int_with_range("Input id of patient", &id, 1, pq->current_id - 1);
-  remove_patient_from_queue(pq, id);
-  print_queue(pq);
+  printPatientQueue(patientQueue);
+  inputIntWithRange("Input id of patient", &id, 1, patientQueue->currentId - 1);
+  removePatientFromQueue(patientQueue, id);
+  printPatientQueue(patientQueue);
 }
 
-void print_patient_pov(struct patient_queue *pq) {
-  clear_screen();
-  if (pq->red_head == NULL && pq->orange_head == NULL &&
-      pq->yellow_head == NULL && pq->green_head == NULL &&
-      pq->blue_head == NULL) {
+void printPatientPOV(PatientQueue *patientQueue) {
+  clearScreen();
+  if (patientQueue->redHead == NULL && patientQueue->orangeHead == NULL &&
+      patientQueue->yellowHead == NULL && patientQueue->greenHead == NULL &&
+      patientQueue->blueHead == NULL) {
     printf("There are no patients to print POV from. Please triage some "
            "patients!\n");
     return;
   }
   int id;
-  print_queue(pq);
-  input_int_with_range("Input id of patient", &id, 1, pq->current_id - 1);
-  clear_screen();
-  print_queue_patient_pov(pq, id);
+  printPatientQueue(patientQueue);
+  inputIntWithRange("Input id of patient", &id, 1, patientQueue->currentId - 1);
+  clearScreen();
+  printPatientQueuePOV(patientQueue, id);
 }

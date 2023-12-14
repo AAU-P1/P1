@@ -1,3 +1,3 @@
 #include "menu.h"
 
-int main(void) { start_menu(); }
+int main(void) { startMenu(); }

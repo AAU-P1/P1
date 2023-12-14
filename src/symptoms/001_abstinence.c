@@ -8,51 +8,30 @@
  * return the triage level from an Abstinence struct
  * @param allergic: Abstinence struct
  */
-enum Triage_Level get_symptoms_abstinence_triage(struct Abstinence abstinence) {
-  enum Triage_Level triage_level = Green;
+TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence) {
+  TriageLevel triageLevel = T_GREEN;
 
-  bool red = abstinence.cramps == AC_ongoing;
+  bool red = abstinence.cramps == AC_ONGOING;
 
-  bool orange = abstinence.cramps == AC_now_discontinued ||
-                abstinence.restless == AC_yes_w_conf_or_haluc;
+  bool orange = abstinence.cramps == AC_NOW_DISCONTINUED ||
+                abstinence.restless == AR_YES_W_CONF_OR_HALUC;
 
-  bool yellow = abstinence.cramps == AC_by_previous_contact ||
-                abstinence.restless == AC_yes;
+  bool yellow = abstinence.cramps == AC_BY_PREVIOUS_CONTACT ||
+                abstinence.restless == AR_YES;
 
-  bool green = abstinence.restless == AC_easy_or_none;
+  bool green = abstinence.restless == AR_EASY_OR_NONE;
 
   if (red) {
-    triage_level = Red;
+    triageLevel = T_RED;
   } else if (orange) {
-    triage_level = Orange;
+    triageLevel = T_ORANGE;
   } else if (yellow) {
-    triage_level = Yellow;
+    triageLevel = T_YELLOW;
   } else if (green) {
-    triage_level = Green;
+    triageLevel = T_GREEN;
   }
 
-  return triage_level;
-}
-
-/*
- * @param abstinence: abstinence struct to be converted
- * Converts a abstinence struct to a string, so it can be saved
- */
-char *symptoms_abstinence_stringify(struct Abstinence abstinence) {
-  // Implement function that returns string from abstinence
-  return "";
-}
-
-/*
- * @param str: string to be converted
- * Converts a string into an abstinence struct
- */
-struct Abstinence *symptoms_abstinence_parse_string(char *str) {
-  // Implement function that returns abstinence struct from string
-  struct Abstinence *abstinence =
-      (struct Abstinence *)malloc(sizeof(struct Abstinence));
-
-  return abstinence;
+  return triageLevel;
 }
 
 // ################################ CONTROLLER ################################
@@ -60,55 +39,54 @@ struct Abstinence *symptoms_abstinence_parse_string(char *str) {
 /*
  * returns abstinence struct from user input
  */
-struct Abstinence *input_abstinence_symptom() {
+Abstinence *inputSymptomAbstinence() {
 
-  struct Abstinence *abstinence =
-      (struct Abstinence *)malloc(sizeof(struct Abstinence));
+  Abstinence *abstinence = (Abstinence *)malloc(sizeof(Abstinence));
 
-  char choice;
-  clear_screen();
-  input_char(&choice,
-             "Does the patient have abstinent cramps? (O)ngoing, "
-             "Now_(D)iscontinued (B)y_Previous_Contact (N)one",
-             "OoDdBbNn");
+  char c;
+  clearScreen();
+  inputChar(&c,
+            "Does the patient have abstinent cramps? (O)ngoing, "
+            "Now_(D)iscontinued (B)y_Previous_Contact (N)one",
+            "OoDdBbNn");
 
-  switch (choice) {
+  switch (c) {
   case 'O':
   case 'o':
-    abstinence->cramps = AC_ongoing;
+    abstinence->cramps = AC_ONGOING;
     break;
   case 'D':
   case 'd':
-    abstinence->cramps = AC_now_discontinued;
+    abstinence->cramps = AC_NOW_DISCONTINUED;
     break;
   case 'B':
   case 'b':
-    abstinence->cramps = AC_by_previous_contact;
+    abstinence->cramps = AC_BY_PREVIOUS_CONTACT;
     break;
   case 'N':
   case 'n':
-    abstinence->cramps = AC_none;
+    abstinence->cramps = AC_NONE;
     break;
   }
 
-  clear_screen();
-  input_char(&choice,
-             "Is the patient restless from abstinence "
-             "Yes_(W)ith_Confusion_or_Halucination, (Y)es, (E)asy_or_None ",
-             "WwYyEe");
+  clearScreen();
+  inputChar(&c,
+            "Is the patient restless from abstinence "
+            "Yes_(W)ith_Confusion_or_Halucination, (Y)es, (E)asy_or_None ",
+            "WwYyEe");
 
-  switch (choice) {
+  switch (c) {
   case 'W':
   case 'w':
-    abstinence->restless = AC_yes_w_conf_or_haluc;
+    abstinence->restless = AR_YES_W_CONF_OR_HALUC;
     break;
   case 'Y':
   case 'y':
-    abstinence->restless = AC_yes;
+    abstinence->restless = AR_YES;
     break;
   case 'E':
   case 'e':
-    abstinence->restless = AC_easy_or_none;
+    abstinence->restless = AR_EASY_OR_NONE;
     break;
   }
   return abstinence;

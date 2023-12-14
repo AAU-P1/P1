@@ -4,44 +4,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int start_menu(void) {
+void startMenu() {
 
-  struct patient_queue patient_queue = {NULL, NULL, NULL, NULL, NULL, 1};
+  PatientQueue patientQueue = {NULL, NULL, NULL, NULL, NULL, 1};
 
-  load_patient_queue_from_file(&patient_queue);
+  loadPatientQueueFromFile(&patientQueue);
 
-  char choice;
-  clear_screen();
-  print_queue(&patient_queue);
+  char c;
+  clearScreen();
+  printPatientQueue(&patientQueue);
   while (true) {
     printf("(T)riage new patient | (R)emove Patient | (D)isplay Queue "
            "| Display (P)OV Queue | (Q)uit\n");
-    choice = getchar();
-    clear_input_buffer();
+    c = getchar();
+    clearInputBuffer();
 
-    switch (choice) {
+    switch (c) {
     case 'T':
     case 't': {
-      struct Patient *patient = input_patient();
-      get_triage(patient);
-      add_patient_to_queue(&patient_queue, patient, patient_queue.current_id);
-      patient_queue.current_id++;
-      save_patient_queue_to_file(&patient_queue);
-      print_queue(&patient_queue);
+      Patient *patient = inputPatient();
+      triagePatient(patient);
+      addPatientToQueue(&patientQueue, patient, patientQueue.currentId);
+      patientQueue.currentId++;
+      savePatientQueueToFile(&patientQueue);
+      printPatientQueue(&patientQueue);
       break;
     }
     case 'R':
     case 'r':
-      remove_patient(&patient_queue);
-      save_patient_queue_to_file(&patient_queue);
+      removePatient(&patientQueue);
+      savePatientQueueToFile(&patientQueue);
       break;
     case 'D':
     case 'd':
-      print_queue(&patient_queue);
+      printPatientQueue(&patientQueue);
       break;
     case 'P':
     case 'p':
-      print_patient_pov(&patient_queue);
+      printPatientPOV(&patientQueue);
       break;
     case 'Q':
     case 'q':

@@ -1,58 +1,60 @@
 #ifndef PATIENT_H
 #define PATIENT_H
+
+#include "symptoms.h"
 #include "triage_level.h"
+#include "vitals.h"
 #include <stdbool.h>
 
 // ################################## MODEL ##################################
 
-enum Gender { Male, Female, Other };
+typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_OTHER } Gender;
 
-struct Patient {
+typedef struct {
   char name[100];
   int age;
   int id;
-  enum Triage_Level triage_level;
-  enum Gender gender;
-  struct Vitals *vitals;
-  struct symptom_node *symptoms_head;
-};
-
-void get_triage(struct Patient *patient);
-
-struct patient_queue {
-  struct patient_node *red_head;
-  struct patient_node *orange_head;
-  struct patient_node *yellow_head;
-  struct patient_node *green_head;
-  struct patient_node *blue_head;
-  int current_id;
-};
-
-struct patient_node {
+  TriageLevel triageLevel;
+  Gender gender;
+  Vitals *vitals;
+  SymptomNode *symptomsHead;
+} Patient;
+typedef struct PatientNode PatientNode;
+struct PatientNode {
   void *data;
-  struct patient_node *next;
+  PatientNode *next;
 };
 
-struct patient_node *insert_tail(struct patient_node *sl, void *el);
-void add_patient_to_queue(struct patient_queue *patient_queue,
-                          struct Patient *patient, int patient_id);
+typedef struct {
+  PatientNode *redHead;
+  PatientNode *orangeHead;
+  PatientNode *yellowHead;
+  PatientNode *greenHead;
+  PatientNode *blueHead;
+  int currentId;
+} PatientQueue;
 
-void remove_patient_from_queue(struct patient_queue *pq, int p_id);
+void addPatientToQueue(PatientQueue *patientQueue, Patient *patient, int id);
+PatientNode *addPatientToList(PatientNode *head, void *patient);
 
-struct patient_node *remove_patient_from_list(struct patient_node *sl, int id);
+void removePatientFromQueue(PatientQueue *patientQueue, int id);
+PatientNode *removePatientFromList(PatientNode *head, int id);
 
-// ################################## VIEW ##################################
+void triagePatient(Patient *patient);
 
-void print_patient(struct Patient *patient);
-void print_circular_patient_list(struct patient_node *sl);
-void print_queue(struct patient_queue *patient_queue);
+// ############################ CONTROLLER/VIEW ############################
 
-void print_queue_patient_pov(struct patient_queue *sl, int id);
+void printPatientQueue(PatientQueue *patientQueue);
+void printPatientList(PatientNode *head);
+void printPatient(Patient *patient);
 
-// ################################ CONTROLLER ################################
+void printPatientQueuePOV(PatientQueue *patientQueue, int id);
+void printPatientListPOV(PatientNode *head, int id, char *message,
+                         bool *patientFound);
 
-struct Patient *input_patient();
-void remove_patient(struct patient_queue *pq);
-void print_patient_pov(struct patient_queue *pq);
+Patient *inputPatient();
+void removePatient(PatientQueue *patientQueue);
+void printPatientPOV(PatientQueue *patientQueue);
+void inputPatientName(Patient *patient);
 
 #endif

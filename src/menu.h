@@ -1,1 +1,1 @@
-int start_menu(void);
+void startMenu();

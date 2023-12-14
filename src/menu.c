@@ -1,5 +1,5 @@
-#include "controller.h"
 #include "file.h"
+#include "input.h"
 #include "patient.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -21,7 +21,7 @@ typedef struct {
 
 TriageLevel getVitalTriage(Vitals vitals);
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 void inputVitals(Vitals *vitals);
 

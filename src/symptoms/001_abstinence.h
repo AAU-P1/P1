@@ -25,7 +25,7 @@ typedef struct {
 
 TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence);
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 Abstinence *inputSymptomAbstinence();
 #endif

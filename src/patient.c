@@ -1,5 +1,5 @@
 #include "patient.h"
-#include "controller.h"
+#include "input.h"
 #include "symptoms.h"
 #include "triage_level.h"
 #include "vitals.h"

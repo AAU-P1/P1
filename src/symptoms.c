@@ -1,5 +1,5 @@
 #include "symptoms.h"
-#include "controller.h"
+#include "input.h"
 #include "symptoms/001_abstinence.h"
 #include "symptoms/002_allergic_symptoms.h"
 #include "triage_level.h"

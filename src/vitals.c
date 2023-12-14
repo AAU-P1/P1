@@ -1,5 +1,5 @@
 #include "vitals.h"
-#include "controller.h"
+#include "input.h"
 #include "triage_level.h"
 
 // ################################## MODEL ##################################
@@ -48,7 +48,7 @@ TriageLevel getVitalTriage(Vitals vitals) {
   return triageLevel;
 }
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 void inputVitals(Vitals *vitals) {
   char c;

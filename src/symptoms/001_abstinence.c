@@ -1,5 +1,5 @@
 #include "001_abstinence.h"
-#include "../controller.h"
+#include "../input.h"
 #include <stdlib.h>
 
 // ################################## MODEL ##################################
@@ -34,7 +34,7 @@ TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence) {
   return triageLevel;
 }
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 /*
  * returns abstinence struct from user input

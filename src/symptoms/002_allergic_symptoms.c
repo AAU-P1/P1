@@ -1,5 +1,5 @@
 #include "002_allergic_symptoms.h"
-#include "../controller.h"
+#include "../input.h"
 #include <stdlib.h>
 
 // ################################## MODEL ##################################
@@ -33,7 +33,7 @@ TriageLevel getSymptomAllergicTriage(Allergic allergic) {
   return triageLevel;
 }
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 /*
  * returns Allergic struct from user input

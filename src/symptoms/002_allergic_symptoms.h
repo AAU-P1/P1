@@ -24,7 +24,7 @@ typedef struct {
 
 TriageLevel getSymptomAllergicTriage(Allergic allergic);
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
 Allergic *inputSymptomAllergic();
 #endif

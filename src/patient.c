@@ -263,33 +263,24 @@ Patient *inputPatient() {
     break;
   }
 
-  triagePatient(patient);
-
-  if (patient->triageLevel == T_RED) {
-    return patient;
-  }
-  // Get patient Symptoms
-
-  clearScreen();
-  inputChar(&c, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
-
   bool doneInputting = false;
 
   while (!doneInputting) {
+    clearScreen();
+    inputChar(&c, "Would you like to input a/more Symptoms? (Y)es  (N)o",
+              "YyNn");
     switch (c) {
     case 'Y':
     case 'y':
       patient->symptomsHead = inputSymptom(patient->symptomsHead);
+      triagePatient(patient);
       break;
     case 'N':
     case 'n':
       doneInputting = true;
       break;
     }
-    clearScreen();
-    inputChar(&c, "Would you like to input more Symptoms? (Y)es  (N)o", "YyNn");
   }
-
   return patient;
 }
 

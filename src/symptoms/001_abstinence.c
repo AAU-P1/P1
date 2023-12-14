@@ -6,7 +6,7 @@
 
 /*
  * return the triage level from an Abstinence struct
- * @param allergic: Abstinence struct
+ * @param asbstinence: Abstinence struct
  */
 TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence) {
   TriageLevel triageLevel = T_GREEN;
@@ -37,7 +37,7 @@ TriageLevel getSymptomAbstinenceTriage(Abstinence abstinence) {
 // ############################ CONTROLLER/VIEW #############################
 
 /*
- * returns abstinence struct from user input
+ * returns Abstinence struct from user input
  */
 Abstinence *inputSymptomAbstinence() {
 

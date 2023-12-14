@@ -4,6 +4,10 @@
 
 // ################################## MODEL ##################################
 
+/*
+ * returns triage level from Vitals struct
+ * @param vitals: vitals struct to triage from
+ */
 TriageLevel getVitalTriage(Vitals vitals) {
   TriageLevel triageLevel = T_GREEN;
 
@@ -50,6 +54,10 @@ TriageLevel getVitalTriage(Vitals vitals) {
 
 // ############################ CONTROLLER/VIEW #############################
 
+/*
+ * returns Vitals struct from user input
+ * @param vitals: output parameter to load data into
+ */
 void inputVitals(Vitals *vitals) {
   char c;
   clearScreen();

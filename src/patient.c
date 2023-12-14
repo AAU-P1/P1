@@ -9,7 +9,11 @@
 
 // ################################## MODEL ##################################
 
-PatientNode *addPatientToList(PatientNode *head, void *patient) {
+/*
+ * Adds a patient to a linked list
+ * @param
+ */
+PatientNode *addPatientToList(PatientNode *head, Patient *patient) {
   PatientNode *newNode = (PatientNode *)malloc(sizeof(PatientNode));
   if (newNode == NULL) {
     exit(EXIT_FAILURE);
@@ -17,7 +21,7 @@ PatientNode *addPatientToList(PatientNode *head, void *patient) {
 
   PatientNode *cur;
 
-  newNode->data = patient;
+  newNode->patient = patient;
   newNode->next = NULL;
 
   if (head == NULL) {
@@ -33,6 +37,11 @@ PatientNode *addPatientToList(PatientNode *head, void *patient) {
   return head;
 }
 
+/*
+ * removes a patient from a patientQueue
+ * @param patientQueue: output parameter, where patient is removed from
+ * @param id: id of patient to remove
+ */
 void removePatientFromQueue(PatientQueue *patientQueue, int id) {
   patientQueue->redHead = removePatientFromList(patientQueue->redHead, id);
   patientQueue->orangeHead =
@@ -43,6 +52,11 @@ void removePatientFromQueue(PatientQueue *patientQueue, int id) {
   patientQueue->blueHead = removePatientFromList(patientQueue->blueHead, id);
 }
 
+/*
+ * removes a patient from a linked list
+ * @param head: head of linked list
+ * @param id: id of patient to remove
+ */
 PatientNode *removePatientFromList(PatientNode *head, int id) {
   if (head == NULL) {
     return head;
@@ -53,8 +67,7 @@ PatientNode *removePatientFromList(PatientNode *head, int id) {
   prev = NULL;
 
   do {
-    Patient *patient = (Patient *)cur->data;
-    if (patient->id == id) {
+    if (cur->patient->id == id) {
 
       if (prev == NULL) {
         PatientNode *newHead = cur->next;
@@ -72,6 +85,12 @@ PatientNode *removePatientFromList(PatientNode *head, int id) {
   return head;
 }
 
+/*
+ * adds a patient to the end of the queue under their triage level
+ * @param patientQueue: output parameter to add patient to
+ * @param patient: patient to add to queue
+ * @param patient: id to assign to patient
+ */
 void addPatientToQueue(PatientQueue *patientQueue, Patient *patient, int id) {
 
   patient->id = id;
@@ -98,6 +117,10 @@ void addPatientToQueue(PatientQueue *patientQueue, Patient *patient, int id) {
   }
 }
 
+/*
+ * Triages a patient using vital parameters and symptoms
+ * @param patient: output parameter of patient to edit triage level of
+ */
 void triagePatient(Patient *patient) {
 
   patient->triageLevel = T_BLUE;
@@ -115,8 +138,12 @@ void triagePatient(Patient *patient) {
   }
 }
 
-// ################################## VIEW ##################################
+// ############################ CONTROLLER/VIEW #############################
 
+/*
+ * prints a patient
+ * @param patient: patient to print
+ */
 void printPatient(Patient *patient) {
   printf("name:%s, age:%d, id:%d ", patient->name, patient->age, patient->id);
 
@@ -133,6 +160,10 @@ void printPatient(Patient *patient) {
   }
 }
 
+/*
+ * prints a linked list of patients
+ * @param head: head of linked list
+ */
 void printPatientList(PatientNode *head) {
   PatientNode *cur;
 
@@ -142,11 +173,15 @@ void printPatientList(PatientNode *head) {
   cur = head;
 
   do {
-    printPatient(cur->data);
+    printPatient(cur->patient);
     cur = cur->next;
   } while (cur != NULL);
 }
 
+/*
+ * prints a patientqueue
+ * @param patientQueue: patientqueue to print
+ */
 void printPatientQueue(PatientQueue *patientQueue) {
   clearScreen();
   printf("\nRED:\n");
@@ -162,7 +197,16 @@ void printPatientQueue(PatientQueue *patientQueue) {
   printf("\n");
 }
 
-void printPatientListPOV(PatientNode *head, int id, char *message,
+/*
+ * prints how many patients are in a linked list of patients, until a specific
+ * patient is reached
+ * @param head: head of linked list
+ * @param id: id of patient to look for
+ * @param name: name of triage level
+ * @param patientFound: output parameter to notify the upper function if the
+ * patient was found
+ */
+void printPatientListPOV(PatientNode *head, int id, char *name,
                          bool *patientFound) {
   if (*patientFound || head == NULL) {
     return;
@@ -172,8 +216,7 @@ void printPatientListPOV(PatientNode *head, int id, char *message,
   int n = 0;
 
   do {
-    Patient *patient = (Patient *)cur->data;
-    if (patient->id == id) {
+    if (cur->patient->id == id) {
       *patientFound = true;
       break;
     }
@@ -182,10 +225,15 @@ void printPatientListPOV(PatientNode *head, int id, char *message,
   } while (cur != NULL);
 
   if (n > 0) {
-    printf("%s: %d\n", message, n);
+    printf("%s: %d\n", name, n);
   }
 }
 
+/*
+ * prints a patientqueue from the point of view of a specific patient
+ * @param patientQueue: patientQueue to print
+ * @param id: id of specfic patient
+ */
 void printPatientQueuePOV(PatientQueue *patientQueue, int id) {
   clearScreen();
   printf("Patients in front of you:\n");
@@ -198,8 +246,10 @@ void printPatientQueuePOV(PatientQueue *patientQueue, int id) {
   printf("\n");
 }
 
-// ################################ CONTROLLER ################################
-
+/*
+ * Gets name of patient from user
+ * @param patient: output parameter to load name into
+ */
 void inputPatientName(Patient *patient) {
   // Get patient Name
   clearScreen();
@@ -216,6 +266,9 @@ void inputPatientName(Patient *patient) {
   }
 }
 
+/*
+ * returns Patient struct from user input
+ */
 Patient *inputPatient() {
 
   Patient *patient = (Patient *)malloc(sizeof(Patient));
@@ -293,6 +346,10 @@ Patient *inputPatient() {
   return patient;
 }
 
+/*
+ * inquire user about which patient to remove and remove patient
+ * @param patientQueue: output parameter where patient is removed from
+ * */
 void removePatient(PatientQueue *patientQueue) {
   clearScreen();
   if (patientQueue->redHead == NULL && patientQueue->orangeHead == NULL &&
@@ -308,6 +365,10 @@ void removePatient(PatientQueue *patientQueue) {
   printPatientQueue(patientQueue);
 }
 
+/*
+ * inquire user about which patient to print POV from and print POV
+ * @param patientQueue: patientqueue that is printed
+ */
 void printPatientPOV(PatientQueue *patientQueue) {
   clearScreen();
   if (patientQueue->redHead == NULL && patientQueue->orangeHead == NULL &&

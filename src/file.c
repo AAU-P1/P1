@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * Loads a patient queue stored in a file into a patient queue
+ * @param patientQueue: output parameter to load patient queue into
+ */
 void loadPatientQueueFromFile(PatientQueue *patientQueue) {
   FILE *file;
 
@@ -15,8 +19,6 @@ void loadPatientQueueFromFile(PatientQueue *patientQueue) {
   char line[128];
 
   while (fgets(line, sizeof(line), file)) {
-    /* note that fgets don't strip the terminating \n, checking its
-       presence would allow to handle lines longer that sizeof(line) */
     Patient *patient = (Patient *)malloc(sizeof(Patient));
     if (patient == NULL) {
       exit(EXIT_FAILURE);
@@ -33,10 +35,14 @@ void loadPatientQueueFromFile(PatientQueue *patientQueue) {
 
   fclose(file);
 }
+
+/*
+ * Saves a PatientQeuue struct to file
+ * @param patientQueue: pointer to patient queue to be saved
+ */
 void savePatientQueueToFile(PatientQueue *patientQueue) {
   FILE *file;
 
-  // Open a file in writing mode
   file = fopen("STATE", "w");
 
   savePatientListToFile(patientQueue->redHead, file);
@@ -48,14 +54,19 @@ void savePatientQueueToFile(PatientQueue *patientQueue) {
   fclose(file);
 }
 
-void savePatientListToFile(PatientNode *list, FILE *file) {
+/*
+ * Saves a linked list of patients to file
+ * @param head: pointer to head of linked list of patients
+ * @param file: pointer to file to save to
+ */
+void savePatientListToFile(PatientNode *head, FILE *file) {
 
   PatientNode *cur;
 
-  if (list == NULL) {
+  if (head == NULL) {
     return;
   }
-  cur = list;
+  cur = head;
 
   do {
     Patient *patient = (Patient *)cur->data;
@@ -64,6 +75,11 @@ void savePatientListToFile(PatientNode *list, FILE *file) {
   } while (cur != NULL);
 }
 
+/*
+ * Saves a patient to file
+ * @param patient: pointer to the patient to be saved
+ * @param file: pointer to file to save to
+ */
 void savePatientToFile(Patient *patient, FILE *file) {
 
   fprintf(file, "%s,%d,%d,%d,%d\n", patient->name, patient->age, patient->id,

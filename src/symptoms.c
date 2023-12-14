@@ -8,6 +8,10 @@
 
 // ################################## MODEL ##################################
 
+/*
+ * returns triage level from list of symptoms
+ * @param head: head of linked list
+ */
 TriageLevel getSymptomListTriage(SymptomNode *head) {
   TriageLevel triageLevel = T_BLUE;
 
@@ -29,17 +33,27 @@ TriageLevel getSymptomListTriage(SymptomNode *head) {
   return triageLevel;
 }
 
-TriageLevel getSymptomTriage(SymptomNode *node) {
-  if (node->symptomId == 1) {
-    Abstinence *abstinence = (Abstinence *)node->data;
+/*
+ * returns triage level of specific symptom
+ * @param symptom: pointer to symptom to triage
+ */
+TriageLevel getSymptomTriage(SymptomNode *symptom) {
+  if (symptom->symptomId == 1) {
+    Abstinence *abstinence = (Abstinence *)symptom->data;
     return getSymptomAbstinenceTriage(*abstinence);
-  } else if (node->symptomId == 2) {
-    Allergic *allergic = (Allergic *)node->data;
+  } else if (symptom->symptomId == 2) {
+    Allergic *allergic = (Allergic *)symptom->data;
     return getSymptomAllergicTriage(*allergic);
   }
   return T_BLUE;
 }
 
+/*
+ * adds a symptom to a linked list
+ * @param head: head of linked list
+ * @param symptom: symptom to add to list
+ * @param symptomId: id of symptom to add
+ */
 SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId) {
   SymptomNode *newNode = (SymptomNode *)malloc(sizeof(SymptomNode));
   if (newNode == NULL) {
@@ -66,8 +80,12 @@ SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId) {
   return head;
 }
 
-// ################################ CONTROLLER ################################
+// ############################ CONTROLLER/VIEW #############################
 
+/*
+ * gets user to input symptom and add it to linked list of symptoms
+ * @param head: head of linked list
+ */
 SymptomNode *inputSymptom(SymptomNode *head) {
 
   int symptomId;

@@ -6,6 +6,6 @@
 void loadPatientQueueFromFile(PatientQueue *patientQueue);
 void savePatientQueueToFile(PatientQueue *patientQueue);
 
-void savePatientListToFile(PatientNode *list, FILE *file);
+void savePatientListToFile(PatientNode *head, FILE *file);
 void savePatientToFile(Patient *patient, FILE *file);
 #endif

@@ -19,9 +19,10 @@ typedef struct {
   Vitals *vitals;
   SymptomNode *symptomsHead;
 } Patient;
+
 typedef struct PatientNode PatientNode;
 struct PatientNode {
-  void *data;
+  Patient *patient;
   PatientNode *next;
 };
 
@@ -35,7 +36,7 @@ typedef struct {
 } PatientQueue;
 
 void addPatientToQueue(PatientQueue *patientQueue, Patient *patient, int id);
-PatientNode *addPatientToList(PatientNode *head, void *patient);
+PatientNode *addPatientToList(PatientNode *head, Patient *patient);
 
 void removePatientFromQueue(PatientQueue *patientQueue, int id);
 PatientNode *removePatientFromList(PatientNode *head, int id);

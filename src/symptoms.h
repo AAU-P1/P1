@@ -20,5 +20,5 @@ SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId);
 
 // ############################ CONTROLLER/VIEW ############################
 
-SymptomNode *inputSymptoms(SymptomNode *head);
+SymptomNode *inputSymptom(SymptomNode *head);
 #endif

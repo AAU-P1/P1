@@ -65,7 +65,7 @@ SymptomNode *addSymptomToList(SymptomNode *head, void *symptom, int symptomId) {
 
 // ################################ CONTROLLER ################################
 
-SymptomNode *inputSymptoms(SymptomNode *head) {
+SymptomNode *inputSymptom(SymptomNode *head) {
 
   int symptomId;
 

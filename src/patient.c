@@ -269,13 +269,25 @@ Patient *inputPatient() {
     return patient;
   }
   // Get patient Symptoms
+
   clearScreen();
   inputChar(&c, "Would you like to input Symptoms? (Y)es  (N)o", "YyNn");
-  switch (c) {
-  case 'Y':
-  case 'y':
-    patient->symptomsHead = inputSymptoms(patient->symptomsHead);
-    break;
+
+  bool doneInputting = false;
+
+  while (!doneInputting) {
+    switch (c) {
+    case 'Y':
+    case 'y':
+      patient->symptomsHead = inputSymptom(patient->symptomsHead);
+      break;
+    case 'N':
+    case 'n':
+      doneInputting = true;
+      break;
+    }
+    clearScreen();
+    inputChar(&c, "Would you like to input more Symptoms? (Y)es  (N)o", "YyNn");
   }
 
   return patient;

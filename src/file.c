@@ -69,8 +69,7 @@ void savePatientListToFile(PatientNode *head, FILE *file) {
   cur = head;
 
   do {
-    Patient *patient = (Patient *)cur->data;
-    savePatientToFile(patient, file);
+    savePatientToFile(cur->patient, file);
     cur = cur->next;
   } while (cur != NULL);
 }

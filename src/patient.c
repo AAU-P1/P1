@@ -145,7 +145,37 @@ void triagePatient(Patient *patient) {
  * @param patient: patient to print
  */
 void printPatient(Patient *patient) {
-  printf("name:%s, age:%d, id:%d ", patient->name, patient->age, patient->id);
+
+  switch (patient->triageLevel) {
+  case T_RED:
+    printf("\033[48;2;255;50;50m\033[38;2;255;255;255m");
+    printf("ID: %d  ", patient->id);
+    printf("\033[48;2;255;100;100m\033[38;2;255;255;255m");
+    break;
+  case T_ORANGE:
+    printf("\033[48;2;255;165;0m\033[38;2;255;255;255m");
+    printf("ID: %d  ", patient->id);
+    printf("\033[48;2;255;200;100m\033[38;2;255;255;255m");
+    break;
+  case T_YELLOW:
+    printf("\033[48;2;255;255;0m\033[38;2;255;255;255m");
+    printf("ID: %d  ", patient->id);
+    printf("\033[48;2;255;255;100m\033[38;2;255;255;255m");
+    break;
+  case T_GREEN:
+    printf("\033[48;2;100;255;100m\033[38;2;255;255;255m");
+    printf("ID: %d  ", patient->id);
+    printf("\033[48;2;0;255;0m\033[38;2;255;255;255m");
+    break;
+  case T_BLUE:
+    printf("\033[48;2;0;0;255m\033[38;2;255;255;255m");
+    printf("ID: %d  ", patient->id);
+    printf("\033[48;2;150;150;255m\033[38;2;255;255;255m");
+    break;
+    break;
+  }
+
+  printf(" name:%s age:%d ", patient->name, patient->age);
 
   switch (patient->gender) {
   case GENDER_MALE:
@@ -184,17 +214,27 @@ void printPatientList(PatientNode *head) {
  */
 void printPatientQueue(PatientQueue *patientQueue) {
   clearScreen();
-  printf("\nRED:\n");
+  printf("\033[48;2;255;255;255m\033[38;2;0;0;0m");
+  printf("                              PATIENTS                              "
+         "\n\n");
+  printf("\033[48;2;255;0;0m\033[38;2;255;255;255m");
+
+  printf("\033[48;2;255;0;0m\033[38;2;255;255;255m");
   printPatientList(patientQueue->redHead);
-  printf("\nORANGE:\n");
+
+  printf("\033[48;2;255;165;0m\033[38;2;255;255;255m");
   printPatientList(patientQueue->orangeHead);
-  printf("\nYELLOW:\n");
+
+  printf("\033[48;2;255;255;0m\033[38;2;255;255;255m");
   printPatientList(patientQueue->yellowHead);
-  printf("\nGREEN:\n");
+
+  printf("\033[48;2;0;255;0m\033[38;2;255;255;255m");
   printPatientList(patientQueue->greenHead);
-  printf("\nBLUE:\n");
+
+  printf("\033[48;2;0;0;255m\033[38;2;255;255;255m");
   printPatientList(patientQueue->blueHead);
-  printf("\n");
+
+  printf("\033[0;39m\n");
 }
 
 /*
